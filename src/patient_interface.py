@@ -1,35 +1,30 @@
 import streamlit as st
+from .patient_data import PatientData
 
 class PatientInputInterface:
     def __init__(self):
-        self.age = None
-        self.ethnicity = None
-        self.smoker = None
-        self.country = None
-        self.mammogram_image = None
+        self.patient_data = PatientData()
 
     def display(self):
         st.title("Patient Health Data Input")
 
         # Patient details input
-        self.age = st.number_input("Age", min_value=0, max_value=130, step=1)
-        self.ethnicity = st.selectbox("Ethnicity", ["Select", "Asian", "African", "Caucasian", "Hispanic", "Other"])
-        self.smoker = st.radio("Smoker", ["Yes", "No"])
-        self.country = st.text_input("Country")
+        age = st.number_input("Age", min_value=0, max_value=130, step=1)
+        ethnicity = st.selectbox("Ethnicity", ["Select", "Asian", "African", "Caucasian", "Hispanic", "Other"])
+        smoker = st.radio("Smoker", ["Yes", "No"])
+        country = st.text_input("Country")
 
         # Mammogram image upload
-        self.mammogram_image = st.file_uploader("Upload Mammogram Image", type=["jpg", "jpeg", "png"])
+        mammogram_image = st.file_uploader("Upload Mammogram Image", type=["jpg", "jpeg", "png"])
 
         # Submit button
         if st.button("Submit"):
+            self.patient_data.set_data(age, ethnicity, smoker, country, mammogram_image)
             self.handle_submit()
 
     def handle_submit(self):
-        # Here you can add code to handle the data after submission
+        # Display the data
+        data_summary = self.patient_data.get_data_summary()
         st.write("Data Submitted:")
-        st.write(f"Age: {self.age}")
-        st.write(f"Ethnicity: {self.ethnicity}")
-        st.write(f"Smoker: {self.smoker}")
-        st.write(f"Country: {self.country}")
-        if self.mammogram_image is not None:
-            st.image(self.mammogram_image, caption="Uploaded Mammogram", use_column_width=True)
+        for key, value in data_summary.items():
+            st.write(f"{key}: {value}")
