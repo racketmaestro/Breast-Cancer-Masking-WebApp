@@ -28,3 +28,5 @@ class PatientInputInterface:
         st.write("Data Submitted:")
         for key, value in data_summary.items():
             st.write(f"{key}: {value}")
+
+        print(self.patient_data.age) ## testing the class instance
