@@ -1,5 +1,5 @@
 import streamlit as st
-from .patient_data import PatientData
+from ..patient_data import PatientData
 
 class PatientInputInterface:
     def __init__(self):
@@ -9,7 +9,7 @@ class PatientInputInterface:
         st.title("Patient Health Data Input")
 
         # Patient details input
-        age = st.number_input("Age", min_value=0, max_value=130, step=1)
+        age = st.slider("Age", min_value=35, max_value=90, step=1)
         ethnicity = st.selectbox("Ethnicity", ["Select", "Asian", "African", "Caucasian", "Hispanic", "Other"])
         smoker = st.radio("Smoker", ["Yes", "No"])
         country = st.text_input("Country")
