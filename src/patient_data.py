@@ -13,6 +13,7 @@ class PatientData:
         self.country = country
         self.mammogram_image = mammogram_image
 
+    # Test function
     def get_data_summary(self):
         return {
             "Age": self.age,

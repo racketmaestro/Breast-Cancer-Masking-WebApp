@@ -1,0 +1,7 @@
+{
+    "age_range": {"min_value": 35, "max_value": 90, "step": 1},
+    "ethnicities": ["Asian", "African", "Caucasian", "Hispanic", "Other"],
+    "file_types": ["jpg", "jpeg", "png"],
+    "smoker" : ["Yes", "No"],
+    "country" : ["United Kingdom", "Singapore"]
+}

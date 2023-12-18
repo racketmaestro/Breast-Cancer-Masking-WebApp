@@ -1,5 +1,6 @@
 import streamlit as st
 from ..patient_data import PatientData
+import json
 
 class PatientInputInterface:
     def __init__(self):
@@ -8,14 +9,14 @@ class PatientInputInterface:
     def display(self):
         st.title("Patient Health Data Input")
 
-        # Patient details input
-        age = st.slider("Age", min_value=35, max_value=90, step=1)
-        ethnicity = st.selectbox("Ethnicity", ["Select", "Asian", "African", "Caucasian", "Hispanic", "Other"])
-        smoker = st.radio("Smoker", ["Yes", "No"])
-        country = st.text_input("Country")
+        with open('options_config.json', 'r') as config_file:
+            config = json.load(config_file)
 
-        # Mammogram image upload
-        mammogram_image = st.file_uploader("Upload Mammogram Image", type=["jpg", "jpeg", "png"])
+        age = st.slider("Age", **config['age_range'])
+        ethnicity = st.selectbox("Ethnicity", config['ethnicities'])
+        mammogram_image = st.file_uploader("Upload Mammogram Image", type=config['file_types'])
+        smoker = st.radio("Smoker", config['smoker'])
+        country = st.selectbox("Country", config['country'])
 
         # Submit button
         if st.button("Submit"):
