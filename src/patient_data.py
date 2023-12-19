@@ -11,6 +11,7 @@ class PatientData:
         self.num_benign_diagnoses = None
         self.atypical_hyperplasia_status = None
         self.mammogram_image = None
+        self.birad_classification = None
 
     def set_data(self, **kwargs):
         for key, value in kwargs.items():
