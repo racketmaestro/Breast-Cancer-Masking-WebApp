@@ -1,17 +1,8 @@
 import sys
 sys.path.insert(0, 'C://Users//amosk//GitHub//Breast-Cancer-Masking-WebApp')
 from src.patient_data import PatientData
+from src.Model.ModelData import ModelData
 from dataclasses import dataclass
-
-@dataclass
-class ModelData:
-    T1: int
-    N_Biop: int
-    HypPlas: int
-    AgeMen: int
-    Age1st: int
-    N_Rels: int
-    Race: int
 
 class ModelController:
     def __init__(self) -> None:
@@ -77,7 +68,9 @@ class ModelController:
 
         return model_data
 
-    def predict_risk(self):
+    def predict_risk(self, ModelData):
+        model_data_json = ModelData.to_dict()
+
         pass
 
     def load_model(self):
@@ -85,6 +78,7 @@ class ModelController:
 
 def main():
     model_controller = ModelController()
+    print("OK")
 
 
 if __name__ == "__main__":
