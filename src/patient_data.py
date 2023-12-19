@@ -12,15 +12,9 @@ class PatientData:
         self.atypicalHyperplasiaStatus = None
         self.mammogram_image = None
 
-    def set_data(self, age, ageMen, ethnicity, relativesWithCancer, ageAtFirstChild, numBenignDiagnoses, atypicalHyperplasiaStatus, mammogram_image):
-        self.age = age
-        self.ageMen = ageMen
-        self.ethnicity = ethnicity
-        self.relativesWithCancer = relativesWithCancer
-        self.ageAtFirstChild = ageAtFirstChild
-        self.numBenignDiagnoses = numBenignDiagnoses
-        self.atypicalHyperplasiaStatus = atypicalHyperplasiaStatus
-        self.mammogram_image = mammogram_image
+    def set_data(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key,value)
 
     # Test function
     def get_data_summary(self):
