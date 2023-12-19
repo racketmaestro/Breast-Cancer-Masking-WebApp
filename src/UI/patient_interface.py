@@ -1,31 +1,35 @@
+import json
 import streamlit as st
 from src.patient_data import PatientData
-import json
 
 class PatientInputInterface:
+    '''
+    '''
     def __init__(self):
+
+        # Instantiate a patient session
         self.patient_data = PatientData()
 
     def display(self):
-        st.title("Patient Health Data Input")
+        st.title("Dilcock Health")
 
         with open('options_config.json', 'r') as config_file:
             config = json.load(config_file)
 
         # Basic input fields
         patient_info = {
+            "mammogram_image": st.file_uploader("Upload Mammogram Image", type=config['file_types']),
             "age": st.slider("Age", **config['age_range']),
             "ageMen": st.slider("Age of first Menstrual Period", **config['age_men_range']),
             "ethnicity": st.selectbox("Ethnicity", config['ethnicities']),
             "relativesWithCancer": st.selectbox("Number of first degree relatives who had breast cancer", config['relatives_with_cancer']),
             "ageAtFirstChild": None,
             "numBenignDiagnoses": None,
-            "atypicalHyperplasiaStatus": None,
-            "mammogram_image": st.file_uploader("Upload Mammogram Image", type=config['file_types'])
+            "atypicalHyperplasiaStatus": None
         }
 
         # Conditional inputs
-        if st.checkbox("Do you have a child?"):
+        if st.checkbox("Tick if you have a child/children"):
             patient_info["ageAtFirstChild"] = st.slider("At what age did you have your first child?", 16, 50)
 
         biopsy_status = st.radio("Have you ever had a biopsy for breast cancer?", ('Yes', 'No', 'Unknown'))
