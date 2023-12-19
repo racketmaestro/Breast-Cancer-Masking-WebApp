@@ -29,7 +29,11 @@ class PatientInputInterface:
             patient_info["ageAtFirstChild"] = st.slider("At what age did you have your first child?", 16, 50)
 
         biopsy_status = st.radio("Have you ever had a biopsy for breast cancer?", ('Yes', 'No', 'Unknown'))
-        if biopsy_status == 'Yes':
+        if biopsy_status == 'No':
+            patient_info["numBenignDiagnoses"] = 0
+        elif biopsy_status == 'Unknown':
+            patient_info["numBenignDiagnoses"] = "Unknown"
+        else:
             patient_info["numBenignDiagnoses"] = st.radio("How many breast biopsies with benign diagnoses:", ('1', '2 or more'))
             patient_info["atypicalHyperplasiaStatus"] = st.radio("Have you ever had a breast biopsy with atypical hyperplasia?", ('Yes', 'No', 'Unknown'))
 
