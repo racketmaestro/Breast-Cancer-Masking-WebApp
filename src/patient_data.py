@@ -28,3 +28,4 @@ class PatientData:
             "Atypical Hyperplasia Status": self.atypicalHyperplasiaStatus,
             "Mammogram Image": "Uploaded" if self.mammogram_image is not None else "Not Uploaded"
         }
+    

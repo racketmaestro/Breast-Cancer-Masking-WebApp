@@ -35,6 +35,9 @@ class PatientInputInterface:
 
         # Submit button logic
         if st.button("Submit"):
+            if patient_info["mammogram_image"] is None:
+                st.error("Please upload a mammogram")
+                # return 
             self.patient_data.set_data(**patient_info)
             self.handle_submit()
 
