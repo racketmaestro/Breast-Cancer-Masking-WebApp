@@ -1,5 +1,5 @@
 import streamlit as st
-from ..patient_data import PatientData
+from src.patient_data import PatientData
 import json
 
 class PatientInputInterface:
@@ -12,15 +12,18 @@ class PatientInputInterface:
         with open('options_config.json', 'r') as config_file:
             config = json.load(config_file)
 
+        # add the options selection UI 
         age = st.slider("Age", **config['age_range'])
+        ageMen = st.slider("Age of first Menstrual Period", **config['age_men_range'])
         ethnicity = st.selectbox("Ethnicity", config['ethnicities'])
         mammogram_image = st.file_uploader("Upload Mammogram Image", type=config['file_types'])
-        smoker = st.radio("Smoker", config['smoker'])
-        country = st.selectbox("Country", config['country'])
 
-        # Submit button
+        # Submit button logic
         if st.button("Submit"):
-            self.patient_data.set_data(age, ethnicity, smoker, country, mammogram_image)
+            # if mammogram_image is None:
+            #     st.error("Please upload a mammogram")
+            #     return
+            self.patient_data.set_data(age, ethnicity, mammogram_image)
             self.handle_submit()
 
     def handle_submit(self):

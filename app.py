@@ -5,11 +5,11 @@ import streamlit as st
 def main():
     interface = PatientInputInterface()
     
-    # Load the web app user interface
     try:
+        # Load the web app user interface
         interface.display()
     except Exception as e:
-        st.error(f"An error occured while loading the page: {e}")
+        st.error(f"An error occured while loading the page, please contact an administrator: {e}")
 
 if __name__ == "__main__":
     main()
