@@ -8,14 +8,14 @@ class ModelController:
     def __init__(self) -> None:
         pass
 
-    def generate_input_data(self, PatientData) -> ModelData:
+    def generate_input_data(self, patient_data: PatientData) -> ModelData:
         '''This function will transform the questionnaire answers into formats
         compatible with the model, and return the ModelData data class'''
 
         model_data = ModelData()
-        model_data.T1 = PatientData.age
-        model_data.AgeMen = PatientData.age_men
-        model_data.Age1st = PatientData.age_at_first_child if not None else 99
+        model_data.T1 = patient_data.age
+        model_data.AgeMen = patient_data.age_men
+        model_data.Age1st = patient_data.age_at_first_child if not None else 99
         
         # Define mappings for relatives_with_cancer
         relatives_mapping = {
@@ -24,27 +24,27 @@ class ModelController:
             "More than one": 2
         }
    
-        model_data.N_Rels = relatives_mapping.get(PatientData.relatives_with_cancer, 99)
+        model_data.N_Rels = relatives_mapping.get(patient_data.relatives_with_cancer, 99)
 
-        if PatientData.num_benign_diagnoses == "Unknown":
+        if patient_data.num_benign_diagnoses == "Unknown":
             model_data.N_Biop = 99
             model_data.HypPlas = 99
-        elif PatientData.num_benign_diagnoses == 0:
+        elif patient_data.num_benign_diagnoses == 0:
             model_data.N_Biop = 0
             model_data.HypPlas = 99
-        elif PatientData.num_benign_diagnoses == "1":
+        elif patient_data.num_benign_diagnoses == "1":
             model_data.N_Biop = 1
-            if PatientData.atypical_hyperplasia_status == "Yes":
+            if patient_data.atypical_hyperplasia_status == "Yes":
                 model_data.HypPlas = 1
-            elif PatientData.atypical_hyperplasia_status == "No":
+            elif patient_data.atypical_hyperplasia_status == "No":
                 model_data.HypPlas = 0
             else:
                 model_data.HypPlas = 99
-        elif PatientData.num_benign_diagnoses == "2 or more":
+        elif patient_data.num_benign_diagnoses == "2 or more":
             model_data.N_Biop = 2 
-            if PatientData.atypical_hyperplasia_status == "Yes":
+            if patient_data.atypical_hyperplasia_status == "Yes":
                 model_data.HypPlas = 1
-            elif PatientData.atypical_hyperplasia_status == "No":
+            elif patient_data.atypical_hyperplasia_status == "No":
                 model_data.HypPlas = 0
             else:
                 model_data.HypPlas = 99
@@ -64,7 +64,7 @@ class ModelController:
             "Other Asian":11
         }
 
-        model_data.Race = race_mapping.get(PatientData.ethnicity)
+        model_data.Race = race_mapping.get(patient_data.ethnicity)
 
         return model_data
 

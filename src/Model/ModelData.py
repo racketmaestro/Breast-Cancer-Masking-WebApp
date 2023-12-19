@@ -7,6 +7,7 @@ class ModelData:
     Age1st: int
     N_Rels: int
     Race: int
+    Birad: int
 
     def to_dict(self):
         return {
@@ -16,5 +17,6 @@ class ModelData:
             "AgeMen": self.AgeMen,
             "Age1st": self.Age1st,
             "N_Rels": self.N_Rels,
-            "Race": self.Race
+            "Race": self.Race,
+            "Birad": self.Birad
         }
