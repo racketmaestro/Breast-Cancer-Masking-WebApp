@@ -3,6 +3,5 @@
     "age_men_range": {"min_value": 7, "max_value": 15, "step": 1},
     "ethnicities": ["White", "African-American", "Hispanic US Born", "Native American", "Hispanic/Latina","Chinese","Japanese","Filipino","Hawaiian","Other Pacific Islander","Other Asian"],
     "file_types": ["jpg", "jpeg", "png"],
-    "smoker" : ["Yes", "No"],
-    "country" : ["United Kingdom", "Singapore"]
+    "relatives_with_cancer": ["None", "One", "More than one", "Unknown"]
 }
