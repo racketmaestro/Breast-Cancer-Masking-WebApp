@@ -5,6 +5,30 @@ from src.patient_data import PatientData
 from src.Model.ModelData import ModelData
 
 class ModelController:
+
+    # Define integer representations for race
+    RACE_MAPPING = {
+        "White":1,
+        "African-American":2,
+        "Hispanic US Born":3,
+        "Native American":4,
+        "Hispanic/Latina":5,
+        "Chinese":6,
+        "Japanese":7,
+        "Filipino":8,
+        "Hawaiian":9,
+        "Other Pacific Islander":10,
+        "Other Asian":11
+    }
+
+    # Define integer representations for relatives
+    RELATIVES_MAPPING = {
+        "None": 0,
+        "One": 1,
+        "More than one": 2
+    }
+
+
     def __init__(self) -> None:
         pass
 
@@ -17,14 +41,8 @@ class ModelController:
         model_data.AgeMen = patient_data.age_men
         model_data.Age1st = patient_data.age_at_first_child if not None else 99
         
-        # Define mappings for relatives_with_cancer
-        relatives_mapping = {
-            "None": 0,
-            "One": 1,
-            "More than one": 2
-        }
-   
-        model_data.N_Rels = relatives_mapping.get(patient_data.relatives_with_cancer, 99)
+        # Map number of relatives answer to an integer
+        model_data.N_Rels = ModelController.RELATIVES_MAPPING.get(patient_data.relatives_with_cancer, 99)
 
         # Default values for both variables
         model_data.N_Biop = 99
@@ -45,22 +63,9 @@ class ModelController:
             elif patient_data.atypical_hyperplasia_status == "No":
                 model_data.HypPlas = 0
 
-        # Map Race to a integer weightage
-        race_mapping = {
-            "White":1,
-            "African-American":2,
-            "Hispanic US Born":3,
-            "Native American":4,
-            "Hispanic/Latina":5,
-            "Chinese":6,
-            "Japanese":7,
-            "Filipino":8,
-            "Hawaiian":9,
-            "Other Pacific Islander":10,
-            "Other Asian":11
-        }
 
-        model_data.Race = race_mapping.get(patient_data.ethnicity)
+        # Map race answer to an integer
+        model_data.Race = ModelController.RACE_MAPPING.get(patient_data.ethnicity)
 
         return model_data
 
