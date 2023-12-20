@@ -1,3 +1,4 @@
 streamlit
 pytest
 pandas
+tensorflow-cpu
