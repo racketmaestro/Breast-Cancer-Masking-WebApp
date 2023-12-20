@@ -1,6 +1,4 @@
 import sys
-import torch
-
 sys.path.insert(0, 'C://Users//amosk//GitHub//Breast-Cancer-Masking-WebApp')
 
 from src.patient_data import PatientData
