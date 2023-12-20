@@ -1,15 +1,17 @@
 import json
 import streamlit as st
 from src.patient_data import PatientData
+from src.Model.ModelController import ModelController
 
 class PatientInputInterface:
     '''
     '''
 
-    def __init__(self):
+    def __init__(self, model_controller: ModelController()):
 
         # Instantiate a patient data storage class
-        self.patient_data = PatientData()
+        self.patient_data = PatientData()  
+        self.model_controller = model_controller
 
         # Initialize the patient_info dictionary. This is specific to the state session
         self.patient_info = {
@@ -53,6 +55,12 @@ class PatientInputInterface:
 
         # Update patient_info dictionary based on user input
         self.patient_info["mammogram_image"] = st.file_uploader("Upload Mammogram Image", type=config['file_types'])
+        # Display the uploaded image
+        if self.patient_info["mammogram_image"] is not None:
+            # Display the uploaded file directly
+            st.image(self.patient_info["mammogram_image"], caption='Uploaded Image', width=300)
+
+
         self.patient_info["age"] = st.slider("Age", **config['age_range'])
         self.patient_info["age_men"] = st.slider("Age of first Menstrual Period", **config['age_men_range'])
         self.patient_info["ethnicity"] = st.selectbox("Ethnicity", config['ethnicities'])
@@ -81,9 +89,15 @@ class PatientInputInterface:
 
     def handle_submit(self):
         # Display the data
-        data_summary = self.patient_data.get_data_summary()
-        st.write("Data Submitted:")
-        for key, value in data_summary.items():
-            st.write(f"{key}: {value}")
+        # data_summary = self.patient_data.get_data_summary()
+        st.write(f":green[Thank you for submitting your information]")
+        # for key, value in data_summary.items():
+        #     st.write(f"{key}: {value}")
+
+        if self.patient_info["mammogram_image"]:
+            prediction = self.model_controller.predict_cancer(self.patient_info["mammogram_image"])
+            st.write(f"Chance of No cancer: :blue[{prediction[0][0]}], Chance of cancer: :blue[{prediction[0][1]}]")
+            if prediction[0][1] >= 80:
+                st.write(f":red[YOU HAVE BREAST CANCER]")
 
         print(self.patient_data.age) ## testing the class instance
