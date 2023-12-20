@@ -25,6 +25,18 @@ class PatientInputInterface:
             "atypical_hyperplasia_status": None
         }
 
+        # Initialize the patient_info dictionary. This is specific to the state session
+        self.patient_info = {
+            "mammogram_image": None,
+            "age": None,
+            "age_men": None,
+            "ethnicity": None,
+            "relatives_with_cancer": None,
+            "age_at_first_child": None,
+            "num_benign_diagnoses": None,
+            "atypical_hyperplasia_status": None
+        }
+
     def display(self):
         left_col, right_col = st.columns(2)
 
