@@ -1,6 +1,5 @@
 import sys
 sys.path.insert(0, 'C://Users//amosk//GitHub//Breast-Cancer-Masking-WebApp')
-import tensorflow as tf
 import io
 from keras.models import load_model
 from src.patient_data import PatientData
