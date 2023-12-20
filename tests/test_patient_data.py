@@ -13,15 +13,15 @@ def test_get_data_summary():
     patient = PatientData()
 
     # Set some data for the patient
-    patient.set_data(age=30, ageMen=13, ethnicity="Caucasian", relativesWithCancer=1, 
-                     ageAtFirstChild=25, numBenignDiagnoses='1', 
-                     atypicalHyperplasiaStatus='No', mammogram_image=None)
+    patient.set_data(age=30, age_men=13, ethnicity="Chinese", relatives_with_cancer=1, 
+                     age_at_first_child=25, num_benign_diagnoses='1', 
+                     atypical_hyperplasia_status='No', mammogram_image=None)
     
     # Expected summary
     expected_summary = {
         "Age": 30,
         "Agemen": 13,
-        "Ethnicity": "Caucasian",
+        "Ethnicity": "Chinese",
         "Relatives with cancer": 1,
         "Age at first child": 25,
         "Number of benign diagnoses": '1',

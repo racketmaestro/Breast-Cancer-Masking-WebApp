@@ -1,8 +1,10 @@
 import sys
+import torch
+
 sys.path.insert(0, 'C://Users//amosk//GitHub//Breast-Cancer-Masking-WebApp')
+
 from src.patient_data import PatientData
 from src.Model.ModelData import ModelData
-from dataclasses import dataclass
 
 class ModelController:
     def __init__(self) -> None:
@@ -26,28 +28,24 @@ class ModelController:
    
         model_data.N_Rels = relatives_mapping.get(patient_data.relatives_with_cancer, 99)
 
-        if patient_data.num_benign_diagnoses == "Unknown":
-            model_data.N_Biop = 99
-            model_data.HypPlas = 99
-        elif patient_data.num_benign_diagnoses == 0:
+        # Default values for both variables
+        model_data.N_Biop = 99
+        model_data.HypPlas = 99
+
+        # Update N_Biop based on num_benign_diagnoses
+        if patient_data.num_benign_diagnoses == "0":
             model_data.N_Biop = 0
-            model_data.HypPlas = 99
         elif patient_data.num_benign_diagnoses == "1":
             model_data.N_Biop = 1
-            if patient_data.atypical_hyperplasia_status == "Yes":
-                model_data.HypPlas = 1
-            elif patient_data.atypical_hyperplasia_status == "No":
-                model_data.HypPlas = 0
-            else:
-                model_data.HypPlas = 99
         elif patient_data.num_benign_diagnoses == "2 or more":
-            model_data.N_Biop = 2 
+            model_data.N_Biop = 2
+
+        # Update HypPlas based on atypical_hyperplasia_status if num_benign_diagnoses is known
+        if patient_data.num_benign_diagnoses != "Unknown":
             if patient_data.atypical_hyperplasia_status == "Yes":
                 model_data.HypPlas = 1
             elif patient_data.atypical_hyperplasia_status == "No":
                 model_data.HypPlas = 0
-            else:
-                model_data.HypPlas = 99
 
         # Map Race to a integer weightage
         race_mapping = {
@@ -78,6 +76,14 @@ class ModelController:
 
 def main():
     model_controller = ModelController()
+    patient_data = PatientData()
+    patient_data.set_data(age=30, age_men=13, ethnicity="Chinese", relatives_with_cancer=1, 
+                     age_at_first_child=25, num_benign_diagnoses='1', 
+                     atypical_hyperplasia_status='No', mammogram_image=None)
+    patient_model_data = model_controller.generate_input_data(patient_data)
+    patient_data_json = patient_model_data.to_dict()
+    print(patient_data_json)
+    
     print("OK")
 
 
