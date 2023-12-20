@@ -1,46 +1,50 @@
+import json
 import streamlit as st
 from src.patient_data import PatientData
-import json
 
 class PatientInputInterface:
+    '''
+    '''
     def __init__(self):
+
+        # Instantiate a patient session
         self.patient_data = PatientData()
 
     def display(self):
-        st.title("Patient Health Data Input")
+        st.title("Dilcock Health")
 
         with open('options_config.json', 'r') as config_file:
             config = json.load(config_file)
 
         # Basic input fields
         patient_info = {
+            "mammogram_image": st.file_uploader("Upload Mammogram Image", type=config['file_types']),
             "age": st.slider("Age", **config['age_range']),
-            "ageMen": st.slider("Age of first Menstrual Period", **config['age_men_range']),
+            "age_men": st.slider("Age of first Menstrual Period", **config['age_men_range']),
             "ethnicity": st.selectbox("Ethnicity", config['ethnicities']),
-            "relativesWithCancer": st.selectbox("Number of first degree relatives who had breast cancer", config['relatives_with_cancer']),
-            "ageAtFirstChild": None,
-            "numBenignDiagnoses": None,
-            "atypicalHyperplasiaStatus": None,
-            "mammogram_image": st.file_uploader("Upload Mammogram Image", type=config['file_types'])
+            "relatives_with_cancer": st.selectbox("Number of first degree relatives who had breast cancer", config['relatives_with_cancer']),
+            "age_at_first_child": None,
+            "num_benign_diagnoses": None,
+            "atypical_hyperplasia_status": None
         }
 
         # Conditional inputs
-        if st.checkbox("Do you have a child?"):
-            patient_info["ageAtFirstChild"] = st.slider("At what age did you have your first child?", 16, 50)
+        if st.checkbox("Tick if you have a child/children"):
+            patient_info["age_at_first_child"] = st.slider("At what age did you have your first child?", **config['age_first_child'])
 
-        biopsy_status = st.radio("Have you ever had a biopsy for breast cancer?", ('Yes', 'No', 'Unknown'))
+        biopsy_status = st.radio("Have you ever had a biopsy for breast cancer?", config['biopsy_status'])
         if biopsy_status == 'No':
-            patient_info["numBenignDiagnoses"] = 0
+            patient_info["num_benign_diagnoses"] = '0'
         elif biopsy_status == 'Unknown':
-            patient_info["numBenignDiagnoses"] = "Unknown"
+            patient_info["num_benign_diagnoses"] = "Unknown"
         else:
-            patient_info["numBenignDiagnoses"] = st.radio("How many breast biopsies with benign diagnoses:", ('1', '2 or more'))
-            patient_info["atypicalHyperplasiaStatus"] = st.radio("Have you ever had a breast biopsy with atypical hyperplasia?", ('Yes', 'No', 'Unknown'))
+            patient_info["num_benign_diagnoses"] = st.radio("How many breast biopsies with benign diagnoses:", config['num_benign_diagnoses'])
+            patient_info["atypical_hyperplasia_status"] = st.radio("Have you ever had a breast biopsy with atypical hyperplasia?", config['atypical_hyperplasia_status'])
 
         # Submit button logic
         if st.button("Submit"):
             if patient_info["mammogram_image"] is None:
-                st.error("Please upload a mammogram")
+                st.error("Please upload a mammogram")   
                 # return 
             self.patient_data.set_data(**patient_info)
             self.handle_submit()
