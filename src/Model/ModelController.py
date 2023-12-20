@@ -35,9 +35,9 @@ class ModelController:
         # Update N_Biop based on num_benign_diagnoses
         if patient_data.num_benign_diagnoses == "0":
             model_data.N_Biop = 0
-        elif patient_data.num_benign_diagnoses == "1":
+        elif patient_data.num_benign_diagnoses == "One":
             model_data.N_Biop = 1
-        elif patient_data.num_benign_diagnoses == "2 or more":
+        elif patient_data.num_benign_diagnoses == "Two or more":
             model_data.N_Biop = 2
 
         # Update HypPlas based on atypical_hyperplasia_status if num_benign_diagnoses is known
@@ -77,9 +77,9 @@ class ModelController:
 def main():
     model_controller = ModelController()
     patient_data = PatientData()
-    patient_data.set_data(age=30, age_men=13, ethnicity="Chinese", relatives_with_cancer=1, 
-                     age_at_first_child=25, num_benign_diagnoses='1', 
-                     atypical_hyperplasia_status='No', mammogram_image=None)
+    patient_data.set_data(age=30, age_men=13, ethnicity="Chinese", relatives_with_cancer="One", 
+                     age_at_first_child=25, num_benign_diagnoses='One', 
+                     atypical_hyperplasia_status='Unknown', mammogram_image=None)
     patient_model_data = model_controller.generate_input_data(patient_data)
     patient_data_json = patient_model_data.to_dict()
     print(patient_data_json)

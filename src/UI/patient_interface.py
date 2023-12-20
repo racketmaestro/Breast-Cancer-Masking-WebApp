@@ -30,21 +30,21 @@ class PatientInputInterface:
 
         # Conditional inputs
         if st.checkbox("Tick if you have a child/children"):
-            patient_info["ageAtFirstChild"] = st.slider("At what age did you have your first child?", 16, 50)
+            patient_info["ageAtFirstChild"] = st.slider("At what age did you have your first child?", **config['age_first_child'])
 
-        biopsy_status = st.radio("Have you ever had a biopsy for breast cancer?", ('Yes', 'No', 'Unknown'))
+        biopsy_status = st.radio("Have you ever had a biopsy for breast cancer?", config['biopsy_status'])
         if biopsy_status == 'No':
-            patient_info["numBenignDiagnoses"] = 0
+            patient_info["numBenignDiagnoses"] = '0'
         elif biopsy_status == 'Unknown':
             patient_info["numBenignDiagnoses"] = "Unknown"
         else:
-            patient_info["numBenignDiagnoses"] = st.radio("How many breast biopsies with benign diagnoses:", ('1', '2 or more'))
-            patient_info["atypicalHyperplasiaStatus"] = st.radio("Have you ever had a breast biopsy with atypical hyperplasia?", ('Yes', 'No', 'Unknown'))
+            patient_info["numBenignDiagnoses"] = st.radio("How many breast biopsies with benign diagnoses:", config['num_benign_diagnoses'])
+            patient_info["atypicalHyperplasiaStatus"] = st.radio("Have you ever had a breast biopsy with atypical hyperplasia?", config['atypical_hyperplasia_status'])
 
         # Submit button logic
         if st.button("Submit"):
             if patient_info["mammogram_image"] is None:
-                st.error("Please upload a mammogram")
+                st.error("Please upload a mammogram")   
                 # return 
             self.patient_data.set_data(**patient_info)
             self.handle_submit()
