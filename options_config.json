@@ -1,7 +1,11 @@
 {
     "age_range": {"min_value": 35, "max_value": 85, "step": 1},
     "age_men_range": {"min_value": 7, "max_value": 15, "step": 1},
+    "age_first_child": {"min_value": 16, "max_value": 50, "step": 1},
     "ethnicities": ["White", "African-American", "Hispanic US Born", "Native American", "Hispanic/Latina","Chinese","Japanese","Filipino","Hawaiian","Other Pacific Islander","Other Asian"],
     "file_types": ["jpg", "jpeg", "png"],
-    "relatives_with_cancer": ["None", "One", "More than one", "Unknown"]
+    "biopsy_status": ["Yes", "No", "Unknown"],
+    "relatives_with_cancer": ["None", "One", "More than one", "Unknown"],
+    "num_benign_diagnoses": ["One", "Two or more"],
+    "atypical_hyperplasia_status": ["Yes","No","Unknown"]
 }
