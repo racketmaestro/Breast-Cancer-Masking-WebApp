@@ -8,7 +8,4 @@ echo "\
 headless = true\n\
 enableCORS=false\n\
 port = $PORT\n\
-" > ~/.streamlit/config.toml
-
-# Append project-specific Streamlit settings to the config
-cat .streamlit/config.toml >> ~/.streamlit/config.toml
+" >> ~/.streamlit/config.toml
