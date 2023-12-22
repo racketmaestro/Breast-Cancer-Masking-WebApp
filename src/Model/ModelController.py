@@ -78,6 +78,9 @@ class ModelController:
         # Map race answer to an integer
         model_data.Race = ModelController.RACE_MAPPING.get(patient_data.ethnicity)
 
+        # model_data.Birad = [Insert code to get the breast density classification]
+        model_data.Birad = 1
+
         return model_data
 
     def predict_risk(self, ModelData):

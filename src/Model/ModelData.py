@@ -7,7 +7,7 @@ class ModelData:
     Age1st: int
     N_Rels: int
     Race: int
-    # Birad: int
+    Birad: int
 
     def to_dict(self):
         '''Returns the information in a dictionary/json format that can be interpreted by the model'''
@@ -20,5 +20,5 @@ class ModelData:
             "Age1st": self.Age1st,
             "N_Rels": self.N_Rels,
             "Race": self.Race,
-            # "Birad": self.Birad
+            "Birad": self.Birad
         }
