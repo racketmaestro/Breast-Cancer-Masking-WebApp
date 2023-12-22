@@ -100,16 +100,19 @@ class PatientInputInterface:
             self.handle_submit()
 
     def handle_submit(self):
-        # Display the data
-        # data_summary = self.patient_data.get_data_summary()
+        '''This function handles the logic when the submit button is pressed'''
         st.write(f":green[Thank you for submitting your information]")
-        # for key, value in data_summary.items():
-        #     st.write(f"{key}: {value}")
 
         if self.patient_info["mammogram_image"]:
             prediction = self.model_controller.predict_cancer(self.patient_info["mammogram_image"])
-            st.write(f"Chance of No cancer: :blue[{prediction[0][0]}], Chance of cancer: :blue[{prediction[0][1]}]")
-            if prediction[0][1] >= 80:
+            # st.write(f"Chance of No cancer: :blue[{prediction[0][0]}], Chance of cancer: :blue[{prediction[0][1]}]")
+
+            # Check for detection cancer
+            if prediction[0][1] >= 0.8:
                 st.write(f":red[YOU HAVE BREAST CANCER]")
+            elif prediction[0][0]>= 0.8:
+                st.write(f":green[No tumour growth detected]")
+            if abs(prediction[0][1] - prediction[0][0]) < 0.7:
+                st.markdown("<span style='background-color: #DFF2BF'>The model is inconclusive</span>, please upload another mammogram or check that you uploaded the correct file.", unsafe_allow_html=True)
 
         print(self.patient_data.age) ## testing the class instance
