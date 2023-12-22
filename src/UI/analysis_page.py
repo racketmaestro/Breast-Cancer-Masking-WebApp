@@ -6,6 +6,7 @@ from src.Model.ModelData import ModelData
 
 class AnalysisPageInterface:
     '''
+    This class will handle the user interface for the analysis page and handle capturing the information input by users
     '''
 
     def __init__(self, model_controller: ModelController()):
@@ -43,6 +44,8 @@ class AnalysisPageInterface:
         st.markdown(
         """
         # Breast Cancer Risk Evaluation
+
+        ### Upload a mammmogram and input your information, our model will evaluate the risk of breast cancer :computer:
         """
         )
 
@@ -90,19 +93,56 @@ class AnalysisPageInterface:
         # Transform the questionnaire data into the format for the risk model
         input_data = self.model_controller.generate_input_data(self.patient_data)
 
+        # Predict the risk of breast cancer 
         risk_output = self.model_controller.predict_risk(input_data)
-        st.write(risk_output)
+        # st.write(risk_output)
+
+        self.generate_evaluation(risk_output)
 
 
-        # if self.patient_info["mammogram_image"]:
-        #     prediction = self.model_controller.predict_cancer(self.patient_info["mammogram_image"])
+    def generate_evaluation(self, risk_output):
+        '''This function generates an evaluation based on the risk_output.'''
 
-        #     # Check for detection cancer
-        #     if prediction[0][1] >= 0.8:
-        #         st.write(f":red[YOU HAVE BREAST CANCER]")
-        #     elif prediction[0][0]>= 0.8:
-        #         st.write(f":green[No tumour growth detected]")
-        #     if abs(prediction[0][1] - prediction[0][0]) < 0.7:
-        #         st.markdown("<span style='background-color: #DFF2BF'>The model is inconclusive</span>, please upload another mammogram or check that you uploaded the correct file.", unsafe_allow_html=True)
+        # Extracting the values from the risk_output dictionary
+        risk_5_year = risk_output["5 Year risk figure"]
+        risk_lifetime = risk_output["Lifetime risk figure"]
+        qual_risk_5_year = risk_output["Qualitative 5 year risk"]
+        qual_risk_lifetime = risk_output["Qualitative lifetime risk"]
 
-        # print(self.patient_data.age) ## testing the class instance
+        # Providing a general introduction to the evaluation
+        st.write("## Breast Cancer Risk Assessment")
+        st.write("Your breast cancer risk assessment is based on several factors and provides both a quantitative and a qualitative evaluation.")
+        # Mapping of numeric BiRad classifications to their respective categories
+        birad_mapping = {1: "A", 2: "B", 3: "C", 4: "D"}
+
+        # Get the BiRad classification from patient data
+        birad_classification = self.patient_data.birad_classification
+        birad_category = birad_mapping.get(birad_classification, None)
+
+        # Write the statement with the BiRad classification
+        if birad_category is not None:
+            st.write(f"According to our Convolutional Neural Network, your mammogram reveals that you have a BiRad classification of: {birad_category}.")
+        else: 
+            st.write(f"Please upload a mammogram so our model can determine your Birad category")
+
+
+        # Displaying the quantitative risk with highlighted numbers
+        st.markdown("### Quantitative Risk Assessment")
+        st.markdown(f"- **5-Year Risk**: <span style='font-size: large;'><b>{risk_5_year:.2f}%</b></span> chance of developing breast cancer in the next 5 years.", unsafe_allow_html=True)
+        st.markdown(f"- **Lifetime Risk**: <span style='font-size: large;'><b>{risk_lifetime:.2f}%</b></span> chance of developing breast cancer in your lifetime.", unsafe_allow_html=True)
+
+        # Displaying the qualitative risk
+        st.write("### Qualitative Risk Assessment")
+        st.write(f"- **5-Year Risk Category**: Your risk is categorized as **{qual_risk_5_year}** for the next 5 years.")
+        st.write(f"- **Lifetime Risk Category**: Your risk is categorized as **{qual_risk_lifetime}** over your lifetime.")
+
+        # Providing additional guidance or recommendations based on the risk
+        st.write("### Recommendations")
+        if qual_risk_5_year == "High" or qual_risk_lifetime == "High":
+            st.write("Given the high risk category, it's recommended to discuss with a healthcare provider for further assessment and possible screening options.")
+        else:
+            st.write("Continue with regular screenings and check-ups as recommended by your healthcare provider.")
+        
+        st.write("Please note that these assessments are based on statistical models and should not replace professional medical advice.")
+
+
