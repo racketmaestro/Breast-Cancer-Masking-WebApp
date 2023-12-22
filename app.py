@@ -16,7 +16,7 @@ def main():
     # Implement navigation side bar
     st.sidebar.title("Main Menu")
     page = st.sidebar.selectbox("Choose a Page:", ["Home", "Analysis"])
-
+        
     if page == "Analysis":
         interface.display()
     else:

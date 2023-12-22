@@ -41,11 +41,11 @@ class AnalysisPageInterface:
 
         st.markdown(
         """
-        ### Breast Cancer Risk Evaluation
+        # Breast Cancer Risk Evaluation
         """
         )
 
-        with open('options_config.json', 'r') as config_file:
+        with open('src/options_config.json', 'r') as config_file:
             config = json.load(config_file)
 
         # Update patient_info dictionary based on user input
