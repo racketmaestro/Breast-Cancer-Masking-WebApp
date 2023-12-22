@@ -1,7 +1,8 @@
 import streamlit as st
 
-class HomePageInterface:
+class HomePageInterface():
     '''
+    This class handles the display and components of the Home Page of the web app
     '''
     def __init__(self):
         pass
@@ -20,13 +21,13 @@ class HomePageInterface:
         # Display the image in the right column
         right_col.image(image_url, caption='Mr Dilcock will see you now')
 
-        st.markdown("---")
 
         st.markdown(
         """
+        ---
         ### Summary
+
         *Dilcocks rule*
+
         """
         )
-
-        st.markdown("---")

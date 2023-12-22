@@ -6,22 +6,24 @@ from src.patient_data import PatientData
 from src.Model.ModelData import ModelData
 from PIL import Image
 import numpy as np
+import pandas as pd
+from src.Model.Gail_ModelV5 import RiskModel
 
 class ModelController:
 
     # Define integer representations for race
     RACE_MAPPING = {
-        "White":1,
-        "African-American":2,
-        "Hispanic US Born":3,
-        "Native American":4,
-        "Hispanic/Latina":5,
-        "Chinese":6,
-        "Japanese":7,
-        "Filipino":8,
-        "Hawaiian":9,
-        "Other Pacific Islander":10,
-        "Other Asian":11
+        "White": 1,
+        "African-American": 2,
+        "Hispanic US Born": 3,
+        "Native American": 4,
+        "Hispanic/Latina": 5,
+        "Chinese": 6,
+        "Japanese": 7,
+        "Filipino": 8,
+        "Hawaiian": 9,
+        "Other Pacific Islander": 10,
+        "Other Asian": 11
     }
 
     # Define integer representations for relatives
@@ -50,7 +52,7 @@ class ModelController:
         model_data = ModelData()
         model_data.T1 = patient_data.age
         model_data.AgeMen = patient_data.age_men
-        model_data.Age1st = patient_data.age_at_first_child if not None else 99
+        model_data.Age1st = patient_data.age_at_first_child if patient_data.age_at_first_child is not None else 98
         
         # Map number of relatives answer to an integer
         model_data.N_Rels = ModelController.RELATIVES_MAPPING.get(patient_data.relatives_with_cancer, 99)
@@ -79,14 +81,18 @@ class ModelController:
         model_data.Race = ModelController.RACE_MAPPING.get(patient_data.ethnicity)
 
         # model_data.Birad = [Insert code to get the breast density classification]
-        model_data.Birad = 1
+        model_data.BiRads = 1
 
         return model_data
 
-    def predict_risk(self, ModelData):
-        model_data_json = ModelData.to_dict()
+    def predict_risk(self, model_data: ModelData):
+        model_data_json = model_data.to_dict()
+        data = pd.DataFrame([model_data_json])
 
-        pass
+        risk_model = RiskModel(data)
+        risk_output = risk_model.run_model()
+        
+        return risk_output
 
     def predict_cancer(self, uploaded_file):
         # Read the file into a bytes-like object

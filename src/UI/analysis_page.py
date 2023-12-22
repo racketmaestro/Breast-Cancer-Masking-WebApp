@@ -2,8 +2,9 @@ import json
 import streamlit as st
 from src.patient_data import PatientData
 from src.Model.ModelController import ModelController
+from src.Model.ModelData import ModelData
 
-class PatientInputInterface:
+class AnalysisPageInterface:
     '''
     '''
 
@@ -32,7 +33,7 @@ class PatientInputInterface:
             "age_men": None,
             "ethnicity": None,
             "relatives_with_cancer": None,
-            "age_at_first_child": None,
+            "age_at_first_child": None, 
             "num_benign_diagnoses": None,
             "atypical_hyperplasia_status": None
         }
@@ -41,11 +42,11 @@ class PatientInputInterface:
 
         st.markdown(
         """
-        ### Breast Cancer Risk Evaluation
+        # Breast Cancer Risk Evaluation
         """
         )
 
-        with open('options_config.json', 'r') as config_file:
+        with open('src/options_config.json', 'r') as config_file:
             config = json.load(config_file)
 
         # Update patient_info dictionary based on user input
@@ -84,18 +85,24 @@ class PatientInputInterface:
 
     def handle_submit(self):
         '''This function handles the logic when the submit button is pressed'''
-        st.write(f":green[Thank you for submitting your information]")
+        st.write(f":green[Information Submitted Successfully]")
 
-        if self.patient_info["mammogram_image"]:
-            prediction = self.model_controller.predict_cancer(self.patient_info["mammogram_image"])
-            # st.write(f"Chance of No cancer: :blue[{prediction[0][0]}], Chance of cancer: :blue[{prediction[0][1]}]")
+        # Transform the questionnaire data into the format for the risk model
+        input_data = self.model_controller.generate_input_data(self.patient_data)
 
-            # Check for detection cancer
-            if prediction[0][1] >= 0.8:
-                st.write(f":red[YOU HAVE BREAST CANCER]")
-            elif prediction[0][0]>= 0.8:
-                st.write(f":green[No tumour growth detected]")
-            if abs(prediction[0][1] - prediction[0][0]) < 0.7:
-                st.markdown("<span style='background-color: #DFF2BF'>The model is inconclusive</span>, please upload another mammogram or check that you uploaded the correct file.", unsafe_allow_html=True)
+        risk_output = self.model_controller.predict_risk(input_data)
+        st.write(risk_output)
 
-        print(self.patient_data.age) ## testing the class instance
+
+        # if self.patient_info["mammogram_image"]:
+        #     prediction = self.model_controller.predict_cancer(self.patient_info["mammogram_image"])
+
+        #     # Check for detection cancer
+        #     if prediction[0][1] >= 0.8:
+        #         st.write(f":red[YOU HAVE BREAST CANCER]")
+        #     elif prediction[0][0]>= 0.8:
+        #         st.write(f":green[No tumour growth detected]")
+        #     if abs(prediction[0][1] - prediction[0][0]) < 0.7:
+        #         st.markdown("<span style='background-color: #DFF2BF'>The model is inconclusive</span>, please upload another mammogram or check that you uploaded the correct file.", unsafe_allow_html=True)
+
+        # print(self.patient_data.age) ## testing the class instance
