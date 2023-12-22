@@ -11,17 +11,17 @@ class ModelController:
 
     # Define integer representations for race
     RACE_MAPPING = {
-        "White":1,
-        "African-American":2,
-        "Hispanic US Born":3,
-        "Native American":4,
-        "Hispanic/Latina":5,
-        "Chinese":6,
-        "Japanese":7,
-        "Filipino":8,
-        "Hawaiian":9,
-        "Other Pacific Islander":10,
-        "Other Asian":11
+        "White": 1,
+        "African-American": 2,
+        "Hispanic US Born": 3,
+        "Native American": 4,
+        "Hispanic/Latina": 5,
+        "Chinese": 6,
+        "Japanese": 7,
+        "Filipino": 8,
+        "Hawaiian": 9,
+        "Other Pacific Islander": 10,
+        "Other Asian": 11
     }
 
     # Define integer representations for relatives

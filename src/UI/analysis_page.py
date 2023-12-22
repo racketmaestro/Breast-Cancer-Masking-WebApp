@@ -3,7 +3,7 @@ import streamlit as st
 from src.patient_data import PatientData
 from src.Model.ModelController import ModelController
 
-class PatientInputInterface:
+class AnalysisPageInterface:
     '''
     '''
 
@@ -84,11 +84,10 @@ class PatientInputInterface:
 
     def handle_submit(self):
         '''This function handles the logic when the submit button is pressed'''
-        st.write(f":green[Thank you for submitting your information]")
+        st.write(f":green[Information Submitted Successfully]")
 
         if self.patient_info["mammogram_image"]:
             prediction = self.model_controller.predict_cancer(self.patient_info["mammogram_image"])
-            # st.write(f"Chance of No cancer: :blue[{prediction[0][0]}], Chance of cancer: :blue[{prediction[0][1]}]")
 
             # Check for detection cancer
             if prediction[0][1] >= 0.8:
