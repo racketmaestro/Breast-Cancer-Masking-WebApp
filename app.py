@@ -4,7 +4,7 @@ from src.Model.ModelController import ModelController
 from src.UI.home_page import HomePageInterface
 
 def main():
-
+    
     try:
         # Instantiate essential components of the app
         model_controller = ModelController()
