@@ -8,6 +8,7 @@ from PIL import Image
 import numpy as np
 import pandas as pd
 from src.Model.Gail_ModelV5 import RiskModel
+import streamlit as st
 
 class ModelController:
 
@@ -81,6 +82,7 @@ class ModelController:
         model_data.Race = ModelController.RACE_MAPPING.get(patient_data.ethnicity)
 
         # model_data.Birad = [Insert code to get the breast density classification]
+        # If no mammogram supplied, default Birad classification to 'A'
         model_data.BiRads = 1
 
         return model_data
@@ -89,8 +91,11 @@ class ModelController:
         model_data_json = model_data.to_dict()
         data = pd.DataFrame([model_data_json])
 
-        risk_model = RiskModel(data)
-        risk_output = risk_model.run_model()
+        try:
+            risk_model = RiskModel(data)
+            risk_output = risk_model.run_model()
+        except Exception as e:
+            st.error(f"An error occured while running risk evaluation: {e}")
         
         return risk_output
 

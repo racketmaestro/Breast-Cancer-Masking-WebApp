@@ -14,7 +14,7 @@ def main():
         st.error(f"An error occured while loading the app components, please contact an administrator: {e}")
 
     # Implement navigation side bar
-    st.sidebar.title("Main Menu")
+    st.sidebar.title("Main Menu :memo:")
     page = st.sidebar.selectbox("Choose a Page:", ["Home", "Analysis"])
         
     if page == "Analysis":

@@ -64,7 +64,7 @@ class RiskModel:
         ###         (3) group Age1st=25-29 with Age1st=20-24 and code as 1
         ###             for   Age1st=30+, 98 (nulliparous)       code as 2
         ###         (4) groups N_Rels=2 with N_Rels=1;
-        
+        if biopCat == 99: biopCat = 0
         if race in [3,5] and biopCat in [0,99]: biopCat = 0
         if race in [3,5] and biopCat == 2: biopCat = 1
         if race == 3: menCat =0
