@@ -338,15 +338,20 @@ class RiskModel:
         absRisk5 = self.absolute_risk(0)
         absRiskLifetime = self.absolute_risk(1)
 
-        riskDict = {1:"Low", 2:"Medium", 3:"High"}
+        riskDict = {1: "Low", 2: "Medium", 3: "High"}
 
-        riskIndex5 = np.ceil(absRisk5/100 * 3)
-        riskIndexLifetime= np.ceil(absRiskLifetime/100 * 3)
+        riskIndex5 = np.ceil(absRisk5 / 100 * 3) if not np.isnan(absRisk5) else None
+        riskIndexLifetime = np.ceil(absRiskLifetime / 100 * 3) if not np.isnan(absRiskLifetime) else None
 
-        qualRisk5 = riskDict[riskIndex5]
-        qualRiskLife = riskDict[riskIndexLifetime]
+        qualRisk5 = riskDict.get(riskIndex5, "Unknown")
+        qualRiskLife = riskDict.get(riskIndexLifetime, "Unknown")
 
-        riskDict = {absRisk5 : "5 Year risk figure", absRiskLifetime : "Lifetime risk figure", qualRisk5 : "Qualative 5 year risk", qualRiskLife : "Qualative lifetime risk"}
+        riskDict = {
+            absRisk5: "5 Year risk figure", 
+            absRiskLifetime: "Lifetime risk figure", 
+            qualRisk5: "Qualitative 5 year risk", 
+            qualRiskLife: "Qualitative lifetime risk"
+        }
         return riskDict
 
 
