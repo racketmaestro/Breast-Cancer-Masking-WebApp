@@ -347,10 +347,10 @@ class RiskModel:
         qualRiskLife = riskDict.get(riskIndexLifetime, "Unknown")
 
         riskDict = {
-            absRisk5: "5 Year risk figure", 
-            absRiskLifetime: "Lifetime risk figure", 
-            qualRisk5: "Qualitative 5 year risk", 
-            qualRiskLife: "Qualitative lifetime risk"
+            "5 Year risk figure": absRisk5, 
+            "Lifetime risk figure": absRiskLifetime, 
+            "Qualitative 5 year risk": qualRisk5, 
+            "Qualitative lifetime risk": qualRiskLife
         }
         return riskDict
 

@@ -52,7 +52,7 @@ class ModelController:
         model_data = ModelData()
         model_data.T1 = patient_data.age
         model_data.AgeMen = patient_data.age_men
-        model_data.Age1st = patient_data.age_at_first_child if patient_data.age_at_first_child is not None else 99
+        model_data.Age1st = patient_data.age_at_first_child if patient_data.age_at_first_child is not None else 98
         
         # Map number of relatives answer to an integer
         model_data.N_Rels = ModelController.RELATIVES_MAPPING.get(patient_data.relatives_with_cancer, 99)
