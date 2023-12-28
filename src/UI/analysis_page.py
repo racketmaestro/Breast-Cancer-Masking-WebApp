@@ -24,20 +24,10 @@ class AnalysisPageInterface:
             "relatives_with_cancer": None,
             "age_at_first_child": None,
             "num_benign_diagnoses": None,
-            "atypical_hyperplasia_status": None
+            "atypical_hyperplasia_status": None,
+            "birad_classification": None
         }
 
-        # Initialize the patient_info dictionary. This is specific to the state session
-        self.patient_info = {
-            "mammogram_image": None,
-            "age": None,
-            "age_men": None,
-            "ethnicity": None,
-            "relatives_with_cancer": None,
-            "age_at_first_child": None, 
-            "num_benign_diagnoses": None,
-            "atypical_hyperplasia_status": None
-        }
 
     def display(self):
 
@@ -83,22 +73,24 @@ class AnalysisPageInterface:
             if self.patient_info["mammogram_image"] is None:
                 st.error("Please upload a mammogram")   
                 # return 
+            else:
+                birad_classification = self.model_controller.predict_birad_classification(self.patient_info["mammogram_image"])
+                self.patient_info["birad_classification"] = birad_classification
+
+            # Set the patient data to the inputs attained from the UI
             self.patient_data.set_data(**self.patient_info)
             self.handle_submit()
 
     def handle_submit(self):
         '''This function handles the logic when the submit button is pressed'''
         st.write(f":green[Information Submitted Successfully]")
-
+   
         # Transform the questionnaire data into the format for the risk model
         input_data = self.model_controller.generate_input_data(self.patient_data)
 
         # Predict the risk of breast cancer 
         risk_output = self.model_controller.predict_risk(input_data)
-        # st.write(risk_output)
-
         self.generate_evaluation(risk_output)
-
 
     def generate_evaluation(self, risk_output):
         '''This function generates an evaluation based on the risk_output.'''
@@ -124,7 +116,6 @@ class AnalysisPageInterface:
             st.write(f"According to our Convolutional Neural Network, your mammogram reveals that you have a BiRad classification of: {birad_category}.")
         else: 
             st.write(f"Please upload a mammogram so our model can determine your Birad category")
-
 
         # Displaying the quantitative risk with highlighted numbers
         st.markdown("### Quantitative Risk Assessment")
