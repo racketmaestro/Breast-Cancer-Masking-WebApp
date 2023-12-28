@@ -9,7 +9,7 @@ def test_init(model_controller):
     """
     Test if the model is loaded successfully.
     """
-    assert model_controller.cancer_detection_model is not None, "Model should be loaded"
+    assert model_controller.birad_classification_model is not None, "Model should be loaded"
 
 def test_predict_cancer(model_controller):
     """
@@ -26,7 +26,7 @@ def test_predict_cancer(model_controller):
     img_byte_arr = io.BytesIO(img_byte_arr.getvalue())
 
     # Test the predict_cancer function
-    prediction = model_controller.predict_cancer(img_byte_arr)
+    prediction = model_controller.predict_birad_classification(img_byte_arr)
     assert prediction is not None, "predict_cancer should return a prediction"
 
 

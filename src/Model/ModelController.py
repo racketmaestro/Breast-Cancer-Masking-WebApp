@@ -1,5 +1,4 @@
 import sys
-sys.path.insert(0, 'C://Users//amosk//GitHub//Breast-Cancer-Masking-WebApp')
 import io
 from keras.models import load_model
 from src.patient_data import PatientData
@@ -38,12 +37,14 @@ class ModelController:
     def __init__(self) -> None:
 
         try:
-            # Adjust the path according to your file structure
-            model_path = 'src/Model/CancerDetectionModel.h5'
-            self.cancer_detection_model = load_model(model_path)
+            # model_path = 'src/Model/CancerDetectionModel.h5'
+            # self.cancer_detection_model = load_model(model_path)
+
+            birad_model_path = 'src/Model/BiradClassificationModel.h5'
+            self.birad_classification_model = load_model(birad_model_path)
         except Exception as e:
-            # Handle exceptions (file not found, model loading errors, etc.)
-            print(f"An error occurred while loading the cancer detection model: {e}")
+            # Handle exceptions 
+            print(f"An error occurred while loading the CNN model: {e}")
         pass
 
     def generate_input_data(self, patient_data: PatientData) -> ModelData:
@@ -81,9 +82,7 @@ class ModelController:
         # Map race answer to an integer
         model_data.Race = ModelController.RACE_MAPPING.get(patient_data.ethnicity)
 
-        # model_data.Birad = [Insert code to get the breast density classification]
-        # If no mammogram supplied, default Birad classification to 'A'
-        model_data.BiRads = 1
+        model_data.BiRads = patient_data.birad_classification
 
         return model_data
 
@@ -95,18 +94,19 @@ class ModelController:
             risk_model = RiskModel(data)
             risk_output = risk_model.run_model()
         except Exception as e:
-            st.error(f"An error occured while running risk evaluation: {e}")
+            st.error(f"An error occured while running risk evaluation, please report it to Silcock and Sons: {e}")
         
         return risk_output
-
-    def predict_cancer(self, uploaded_file):
+    
+    def predict_birad_classification(self, uploaded_file):
+        '''This function will use the mammogram uploaded to predict the BiRads classification of the user'''
         # Read the file into a bytes-like object
         image_data = uploaded_file.read()
 
         # Open the image with PIL (ensures compatibility with different file types)
         image = Image.open(io.BytesIO(image_data))
 
-        # Convert the image to grayscale if it's not already
+        # Convert the image to grayscale
         if image.mode != 'L':
             image = image.convert('L')
 
@@ -119,26 +119,40 @@ class ModelController:
         # Expand dimensions to fit model's expected input
         image_array = np.expand_dims(image_array, axis=0)
 
-        # Make prediction
-        prediction = self.cancer_detection_model.predict(image_array)
+        # Predict probability of each BiRads classification
+        try:
+            prediction = self.birad_classification_model(image_array)
+        except Exception as e:
+            st.error(f"An error occurred while trying to predict BiRads classification: {e}")
+
+        # Set the classification to the category with highest probability. + 1 since zero-index
+        birads_classification = np.argmax(prediction) + 1 
+
+        return birads_classification
+
+    # def predict_cancer(self, uploaded_file):
+    #     # Read the file into a bytes-like object
+    #     image_data = uploaded_file.read()
+
+    #     # Open the image with PIL (ensures compatibility with different file types)
+    #     image = Image.open(io.BytesIO(image_data))
+
+    #     # Convert the image to grayscale if it's not already
+    #     if image.mode != 'L':
+    #         image = image.convert('L')
+
+    #     # Resize the image
+    #     image = image.resize((128, 128))
+
+    #     # Convert the image to a numpy array
+    #     image_array = np.array(image)
         
-        return prediction
+    #     # Expand dimensions to fit model's expected input
+    #     image_array = np.expand_dims(image_array, axis=0)
+
+    #     # Make prediction
+    #     prediction = self.cancer_detection_model.predict(image_array)
+        
+    #     return prediction
 
 
-# def main():
-#     model_controller = ModelController()
-#     patient_data = PatientData()
-#     patient_data.set_data(age=30, age_men=13, ethnicity="Chinese", relatives_with_cancer="One", 
-#                      age_at_first_child=25, num_benign_diagnoses='One', 
-#                      atypical_hyperplasia_status='Unknown', mammogram_image=None)
-#     patient_model_data = model_controller.generate_input_data(patient_data)
-#     patient_data_json = patient_model_data.to_dict()
-#     print(patient_data_json)
-    
-#     im = tf.io.read_file('A_0005_1.LEFT_MLO.jpg')
-#     prediction = model_controller.predict_cancer(im)
-#     print(prediction)
-
-
-# if __name__ == "__main__":
-#     main()
