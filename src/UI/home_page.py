@@ -14,13 +14,24 @@ class HomePageInterface():
 
         left_col.markdown("# Dilcock Health")
         left_col.markdown("## A tool for analyzing risk of breast cancer")
-        left_col.markdown("**Created by Silcock and Sons**")
+        left_col.markdown("*Created by Silcock and Sons*")
 
         # URL of the image
         image_url ='https://cdn.pixabay.com/photo/2021/11/20/03/16/doctor-6810750_1280.png'
 
         # Display the image in the right column
         right_col.image(image_url, caption='Your friendly online helper')
+
+        st.markdown(
+        """
+        ---
+        ## Summary
+
+        *Dilcocks rule*
+
+        ---
+        """
+        )
 
         st.markdown("""
                           ### Contributors
@@ -29,18 +40,6 @@ class HomePageInterface():
         - [Cameron Briginshaw](https://github.com/CptCold12)
         - [Low Wei Han](https://github.com/weihanlow)
         - [David Silcock](https://github.com/dsilcock03)
-        """)
-
-        st.markdown(
-        """
-        ---
-        ### Summary
-
-        *Dilcocks rule*
-
+                    
         [![Source Code](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/racketmaestro/Breast-Cancer-Masking-WebApp)
-
-
-        """
-        )
-
+        """)

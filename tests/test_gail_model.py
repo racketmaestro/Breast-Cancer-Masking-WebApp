@@ -11,9 +11,7 @@ def test_gail_model():
     # Generate 20 sets of user data and test them
     for i in range(20):
         data_dict = data_synth.data_gen()
-
         data = pd.DataFrame([data_dict])
-
         risk_model = RiskModel(data)
         riskDict = risk_model.run_model()
 

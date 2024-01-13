@@ -54,7 +54,8 @@ class ModelController:
         model_data.T1 = patient_data.age
         model_data.AgeMen = patient_data.age_men
         model_data.Age1st = patient_data.age_at_first_child if patient_data.age_at_first_child is not None else 98
-        model_data.BiRads = patient_data.birad_classification
+        model_data.BiRads = patient_data.birad_classification if patient_data.birad_classification is not None else 1
+        # model_data.BiRads = patient_data.birad_classification
 
         # Map number of relatives answer to an integer
         model_data.N_Rels = ModelController.RELATIVES_MAPPING.get(patient_data.relatives_with_cancer, 99)

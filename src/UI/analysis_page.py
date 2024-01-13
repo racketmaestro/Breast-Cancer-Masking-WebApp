@@ -50,7 +50,6 @@ class AnalysisPageInterface:
             # Display the uploaded file directly
             st.image(self.patient_info["mammogram_image"], caption='Uploaded Image', width=300)
 
-
         self.patient_info["age"] = st.slider("Age", **config['age_range'])
         self.patient_info["age_men"] = st.slider("Age of first Menstrual Period", **config['age_men_range'])
         self.patient_info["ethnicity"] = st.selectbox("Ethnicity", config['ethnicities'])
@@ -73,7 +72,7 @@ class AnalysisPageInterface:
         # Check for mammogram image upload
         if st.button("Submit"):
             if self.patient_info["mammogram_image"] is None:
-                st.error("Please upload a mammogram")   
+                st.error("Please upload a mammogram if available")   
             else:
                 birad_classification = self.model_controller.predict_birad_classification(self.patient_info["mammogram_image"])
                 self.patient_info["birad_classification"] = birad_classification
