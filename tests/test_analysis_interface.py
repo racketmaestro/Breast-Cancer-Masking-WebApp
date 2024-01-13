@@ -1,5 +1,5 @@
 import pytest
-from src.Model.ModelController import ModelController
+from src.Model.model_controller import ModelController
 from src.UI.analysis_page import AnalysisPageInterface
 from src.patient_data import PatientData
 

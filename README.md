@@ -7,8 +7,6 @@ This project aims to
 
 [Website](https://breast-cancer-masking-webapp-7bdeafc2e921.herokuapp.com/)
 
-## Development
-
 ## Setting up virtual environment
 
 ```pip install virtualenv```
@@ -52,7 +50,7 @@ Triggered on push or pull requests to the master branch.
 
 - Security: Credentials securely stored in GitHub secrets which is only visible to admins of the repository.
 - Efficiency: Pipeline ensures code quality and functionality before deployment to Heroku platform.
-- This pipeline facilitates a development workflow, ensuring that our production environment maintains reliability, availability, and quality of code.
+- This pipeline facilitates a development workflow, ensuring reliability, availability, and quality of code in the production environment.
 
 
 ### Contributors

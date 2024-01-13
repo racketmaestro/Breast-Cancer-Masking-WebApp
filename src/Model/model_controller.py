@@ -4,7 +4,7 @@ import pandas as pd
 import streamlit as st
 from keras.models import load_model
 from src.patient_data import PatientData
-from src.Model.ModelData import ModelData
+from src.Model.model_data import ModelData
 from PIL import Image
 from src.Model.Gail_ModelV5 import RiskModel
 
@@ -128,7 +128,7 @@ class ModelController:
         return birads_classification
 
     # def predict_cancer(self, uploaded_file):
-    #     # Read the file into a bytes-like object
+    #     # Read the file into a bytes-like
     #     image_data = uploaded_file.read()
 
     #     # Open the image with PIL (ensures compatibility with different file types)

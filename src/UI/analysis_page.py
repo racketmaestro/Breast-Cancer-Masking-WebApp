@@ -1,8 +1,7 @@
 import json
 import streamlit as st
 from src.patient_data import PatientData
-from src.Model.ModelController import ModelController
-from src.Model.ModelData import ModelData
+from src.Model.model_controller import ModelController
 
 class AnalysisPageInterface:
     '''

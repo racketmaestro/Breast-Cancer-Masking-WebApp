@@ -1,6 +1,6 @@
 from src.UI.analysis_page import AnalysisPageInterface
 import streamlit as st
-from src.Model.ModelController import ModelController
+from src.Model.model_controller import ModelController
 from src.UI.home_page import HomePageInterface
 
 def main():
