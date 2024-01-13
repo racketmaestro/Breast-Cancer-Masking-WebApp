@@ -1,8 +1,5 @@
 import numpy as np
-import json
-import dill
 import pandas as pd
-import sys
 from src.Model.Gail_ModelV5 import RiskModel
 
 def test_gail_model():
@@ -17,7 +14,7 @@ def test_gail_model():
         risk_model = RiskModel(data)
         riskDict = risk_model.run_model()
 
-        assert riskDict["5 Year risk figure"]<100 and riskDict["Lifetime risk figure"]<100, "Gail model computations are not accurate"
+        assert riskDict["5 Year risk figure"]<100 and riskDict["Lifetime risk figure"]<100, "Gail model computations should output percentage less than 100"
 
 class DataSynthesizer: 
 

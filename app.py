@@ -1,5 +1,5 @@
-from src.UI.analysis_page import AnalysisPageInterface
 import streamlit as st
+from src.UI.analysis_page import AnalysisPageInterface
 from src.Model.model_controller import ModelController
 from src.UI.home_page import HomePageInterface
 

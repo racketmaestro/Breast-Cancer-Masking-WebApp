@@ -53,7 +53,7 @@ Triggered on push or pull requests to the master branch.
 - This pipeline facilitates a development workflow, ensuring reliability, availability, and quality of code in the production environment.
 
 
-### Contributors
+## Contributors
 
 - [Amos Koh](https://github.com/racketmaestro)
 - [Aveek Goswami](https://github.com/magichampz)
