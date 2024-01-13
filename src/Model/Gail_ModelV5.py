@@ -19,6 +19,8 @@ class RiskModel:
         nRels = data.at[0, 'N_Rels']
         hypPlas = data.at[0, 'HypPlas']
         biRads = data.at[0,'BiRads']
+        menopause_status = data.at[0, 'menopause_status']
+        
         menCat = np.nan
         birthCat = np.nan
         relativesCat = np.nan
@@ -93,7 +95,8 @@ class RiskModel:
             'relativesCat': [relativesCat],
             'hypRiskScale': [hypRiskScale],
             'race': [race],
-            'biRads' : [biRads]
+            'biRads' : [biRads],
+            'menopause_status' : [menopause_status],
         })
         
         return recodedData
@@ -131,7 +134,7 @@ class RiskModel:
         relativesCat = check_cov.at[0,'relativesCat']
         hypRiskScale = check_cov.at[0,'hypRiskScale']
         race = check_cov.at[0,'race']
-        biRads = check_cov.at[0, 'biRads']
+        
 
         # Select the appropriate beta coefficients
         Beta = Wrk_Beta_all[race-1]
@@ -270,6 +273,7 @@ class RiskModel:
         race = int(obs['race'])
         T1 = obs['T1']
         biRads =obs['biRads']
+        menopause_status = obs['menopause_status']
         if lifetime == 1:
             T2 = 90
         else:
@@ -329,10 +333,71 @@ class RiskModel:
 
         AbsRisk = 100 * RskWrk
 
-        if biRads == 3: AbsRisk = AbsRisk * 1.6
-        elif biRads== 4: AbsRisk = AbsRisk * 2.6
+        # Probability distributions of BIRADS scores based on race (include source here)
+        asian_BIRADS_dist_premenopause = [0.015, 0.172, 0.537, 0.275]
+        asian_BIRADS_dist_postmenopause = [0.07, 0.382, 0.447, 0.101]
+        white_BIRADS_dist_premenopause = [0.051, 0.326, 0.469, 0.144]
+        white_BIRADS_dist_postmenopause = [0.130, 0.488, 0.331, 0.051]
+        black_BIRADS_dist_premenopause = [0.065, 0.375, 0.462, 0.098]
+        black_BIRADS_dist_postmenopause = [0.130, 0.548, 0.291, 0.030]
+        hispanic_BIRADS_dist_premenopause = [0.069, 0.366, 0.454, 0.111]
+        hispanic_BIRADS_dist_postmenopause = [0.172, 0.519, 0.272, 0.037]
+        other_BIRADS_dist = [0.1587, 0.3413, 0.3413, 0.1587]
+        BIRADS_risk_adjustment = 0
+
+        if race == 1:
+            if menopause_status:
+                BIRADS_risk_adjustment = self.calculateRiskAdjustment(white_BIRADS_dist_postmenopause, biRads)
+
+            else:
+                BIRADS_risk_adjustment = self.calculateRiskAdjustment(white_BIRADS_dist_premenopause, biRads)
+
+            
+        elif race ==2:
+            if menopause_status:
+                BIRADS_risk_adjustment = self.calculateRiskAdjustment(black_BIRADS_dist_postmenopause, biRads)
+
+            else:
+                BIRADS_risk_adjustment = self.calculateRiskAdjustment(black_BIRADS_dist_premenopause, biRads)
+
+
+        elif race in [3,5]:
+            if menopause_status:
+                BIRADS_risk_adjustment = self.calculateRiskAdjustment(hispanic_BIRADS_dist_postmenopause, biRads)
+
+            else:
+                BIRADS_risk_adjustment = self.calculateRiskAdjustment(hispanic_BIRADS_dist_premenopause, biRads)
+
+
+        elif race in range(6,12):
+            if menopause_status:
+                BIRADS_risk_adjustment = self.calculateRiskAdjustment(asian_BIRADS_dist_postmenopause, biRads)
+
+            else:
+                BIRADS_risk_adjustment = self.calculateRiskAdjustment(asian_BIRADS_dist_premenopause, biRads)
+
+        AbsRisk = AbsRisk * BIRADS_risk_adjustment
+
+
         
         return AbsRisk
+
+    def calculateRiskAdjustment(dist, biRads_score):
+        # Calculates the Weight Average Relative Risk (WARR) of each BIRADS distribution
+
+        # BIRADS relative risks (RR) (include source here)
+        BIRADS_RR_dict = { 
+            "1": 0.5,
+            "2" : 1,
+            "3": 1.6,
+            "4": 2.6
+            }
+
+        WARR = (dist(0)*BIRADS_RR_dict["1"]) + (dist(1)*BIRADS_RR_dict["2"]) + (dist(2)*BIRADS_RR_dict["3"]) + (dist(3)*BIRADS_RR_dict["4"])
+
+        risk_adjustment = BIRADS_RR_dict[str(biRads_score)]/WARR
+
+        return risk_adjustment
 
     def run_model(self):
         absRisk5 = self.absolute_risk(0)
