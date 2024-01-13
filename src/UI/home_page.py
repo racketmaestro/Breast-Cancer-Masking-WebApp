@@ -15,13 +15,20 @@ class HomePageInterface():
         left_col.markdown("# Dilcock Health")
         left_col.markdown("### A tool for analyzing risk of breast cancer")
         left_col.markdown("**Created by Silcock and Sons**")
-        left_col.markdown("**Amos Koh, Cameron Briginshaw, Aveek Goswami, Wei Han Low, David Silcock**")
+        left_col.markdown("""
+                          ### Contributors
+        - [Amos Koh](https://github.com/racketmaestro)
+        - [Aveek Goswami](https://github.com/magichampz)
+        - [Cameron Briginshaw](https://github.com/CptCold12)
+        - [Low Wei Han](https://github.com/weihanlow)
+        - [David Silcock](https://github.com/dsilcock03)
+        """)
 
         # URL of the image
         image_url ='https://cdn.pixabay.com/photo/2020/05/25/03/37/doctor-5216835_1280.png'
 
         # Display the image in the right column
-        right_col.image(image_url, caption='Mr Dilcock will see you now')
+        right_col.image(image_url, caption='Your friendly online helper')
 
 
         st.markdown(
@@ -31,5 +38,9 @@ class HomePageInterface():
 
         *Dilcocks rule*
 
+        [![Source Code](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/racketmaestro/Breast-Cancer-Masking-WebApp)
+
+
         """
         )
+
