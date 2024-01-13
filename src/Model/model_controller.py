@@ -6,7 +6,7 @@ from keras.models import load_model
 from src.patient_data import PatientData
 from src.Model.model_data import ModelData
 from PIL import Image
-from src.Model.Gail_ModelV5 import RiskModel
+from src.Model.risk_model import RiskModel
 
 class ModelController:
 
