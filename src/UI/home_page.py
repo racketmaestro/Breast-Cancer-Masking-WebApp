@@ -8,6 +8,8 @@ class HomePageInterface():
         pass
 
     def display(self):
+
+        # Create the UI components
         left_col, right_col = st.columns(2)
 
         left_col.markdown("# Dilcock Health")

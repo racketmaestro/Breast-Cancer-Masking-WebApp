@@ -4,7 +4,8 @@ from src.Model.ModelController import ModelController
 from src.UI.home_page import HomePageInterface
 
 def main():
-    
+    '''This function is the entry point for streamlit framework to compile and build the web app'''
+
     try:
         # Instantiate essential components of the app
         model_controller = ModelController()
