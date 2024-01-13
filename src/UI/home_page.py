@@ -25,7 +25,7 @@ class HomePageInterface():
         """)
 
         # URL of the image
-        image_url ='https://cdn.pixabay.com/photo/2020/05/25/03/37/doctor-5216835_1280.png'
+        image_url ='https://cdn.pixabay.com/photo/2021/11/20/03/16/doctor-6810750_1280.png'
 
         # Display the image in the right column
         right_col.image(image_url, caption='Your friendly online helper')

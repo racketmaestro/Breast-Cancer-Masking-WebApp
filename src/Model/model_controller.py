@@ -32,7 +32,6 @@ class ModelController:
         "More than one": 2
     }
 
-
     def __init__(self) -> None:
 
         try:
@@ -126,30 +125,4 @@ class ModelController:
         birads_classification = np.argmax(prediction) + 1 
 
         return birads_classification
-
-    # def predict_cancer(self, uploaded_file):
-    #     # Read the file into a bytes-like
-    #     image_data = uploaded_file.read()
-
-    #     # Open the image with PIL (ensures compatibility with different file types)
-    #     image = Image.open(io.BytesIO(image_data))
-
-    #     # Convert the image to grayscale if it's not already
-    #     if image.mode != 'L':
-    #         image = image.convert('L')
-
-    #     # Resize the image
-    #     image = image.resize((128, 128))
-
-    #     # Convert the image to a numpy array
-    #     image_array = np.array(image)
-        
-    #     # Expand dimensions to fit model's expected input
-    #     image_array = np.expand_dims(image_array, axis=0)
-
-    #     # Make prediction
-    #     prediction = self.cancer_detection_model.predict(image_array)
-        
-    #     return prediction
-
 

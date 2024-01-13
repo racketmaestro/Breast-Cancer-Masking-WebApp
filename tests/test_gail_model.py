@@ -3,9 +3,12 @@ import pandas as pd
 from src.Model.Gail_ModelV5 import RiskModel
 
 def test_gail_model():
-
+    '''This unit test will generate synthetic data using DataSynthesizer for the gail model and
+      check that the quantitative risk assessment does not exceed 100%'''
+    
     data_synth = DataSynthesizer()
 
+    # Generate 20 sets of user data and test them
     for i in range(20):
         data_dict = data_synth.data_gen()
 
@@ -17,6 +20,7 @@ def test_gail_model():
         assert riskDict["5 Year risk figure"]<100 and riskDict["Lifetime risk figure"]<100, "Gail model computations should output percentage less than 100"
 
 class DataSynthesizer: 
+    '''This class generates the synthetic data'''
 
     def data_synth_norm(self):
 
