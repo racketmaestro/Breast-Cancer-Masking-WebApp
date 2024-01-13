@@ -7,5 +7,6 @@
     "biopsy_status": ["Yes", "No", "Unknown"],
     "relatives_with_cancer": ["None", "One", "More than one", "Unknown"],
     "num_benign_diagnoses": ["One", "Two or more"],
-    "atypical_hyperplasia_status": ["Yes","No","Unknown"]
+    "atypical_hyperplasia_status": ["Yes","No","Unknown"],
+    "menopause_status": ["Yes", "No"]
 }

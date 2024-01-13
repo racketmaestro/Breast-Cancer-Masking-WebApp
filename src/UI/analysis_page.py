@@ -24,7 +24,8 @@ class AnalysisPageInterface:
             "age_at_first_child": None,
             "num_benign_diagnoses": None,
             "atypical_hyperplasia_status": None,
-            "birad_classification": None
+            "birad_classification": None,
+            "menopause_status" : None
         }
 
 
@@ -68,6 +69,7 @@ class AnalysisPageInterface:
             self.patient_info["num_benign_diagnoses"] = st.radio("How many breast biopsies with benign diagnoses:", config['num_benign_diagnoses'])
             self.patient_info["atypical_hyperplasia_status"] = st.radio("Have you ever had a breast biopsy with atypical hyperplasia?", config['atypical_hyperplasia_status'])
 
+        self.patient_info["menopause_status"] = st.radio("Have you been through menopause?", config['menopause_status'])
         # Check for mammogram image upload
         if st.button("Submit"):
             if self.patient_info["mammogram_image"] is None:
@@ -116,7 +118,7 @@ class AnalysisPageInterface:
         if birad_category is not None:
             st.write(f"According to our Convolutional Neural Network, your mammogram reveals that you have a BiRad classification of: {birad_category}.")
         else: 
-            st.write(f"Please upload a mammogram so our model can determine your Birad category")
+            st.write(f"Please upload a mammogram so our model can determine your Birad category, this will make a more informed analysis")
 
         # Displaying the quantitative risk with highlighted numbers
         st.markdown("### Quantitative Risk Assessment")

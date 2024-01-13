@@ -71,6 +71,9 @@ class ModelController:
         elif patient_data.num_benign_diagnoses == "Two or more":
             model_data.N_Biop = 2
 
+        # Update menopause_status
+        model_data.menopause_status = 1 if patient_data.menopause_status == "Yes" else 0
+
         # Update HypPlas based on atypical_hyperplasia_status if num_benign_diagnoses is known
         if patient_data.num_benign_diagnoses != "Unknown":
             if patient_data.atypical_hyperplasia_status == "Yes":

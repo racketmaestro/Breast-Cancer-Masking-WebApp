@@ -13,16 +13,8 @@ class HomePageInterface():
         left_col, right_col = st.columns(2)
 
         left_col.markdown("# Dilcock Health")
-        left_col.markdown("### A tool for analyzing risk of breast cancer")
+        left_col.markdown("## A tool for analyzing risk of breast cancer")
         left_col.markdown("**Created by Silcock and Sons**")
-        left_col.markdown("""
-                          ### Contributors
-        - [Amos Koh](https://github.com/racketmaestro)
-        - [Aveek Goswami](https://github.com/magichampz)
-        - [Cameron Briginshaw](https://github.com/CptCold12)
-        - [Low Wei Han](https://github.com/weihanlow)
-        - [David Silcock](https://github.com/dsilcock03)
-        """)
 
         # URL of the image
         image_url ='https://cdn.pixabay.com/photo/2021/11/20/03/16/doctor-6810750_1280.png'
@@ -30,6 +22,14 @@ class HomePageInterface():
         # Display the image in the right column
         right_col.image(image_url, caption='Your friendly online helper')
 
+        st.markdown("""
+                          ### Contributors
+        - [Amos Koh](https://github.com/racketmaestro)
+        - [Aveek Goswami](https://github.com/magichampz)
+        - [Cameron Briginshaw](https://github.com/CptCold12)
+        - [Low Wei Han](https://github.com/weihanlow)
+        - [David Silcock](https://github.com/dsilcock03)
+        """)
 
         st.markdown(
         """
