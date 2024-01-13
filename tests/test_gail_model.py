@@ -8,8 +8,8 @@ def test_gail_model():
     
     data_synth = DataSynthesizer()
 
-    # Generate 20 sets of user data and test them
-    for i in range(20):
+    # Generate sets of user data and test them
+    for i in range(50):
         data_dict = data_synth.data_gen()
         data = pd.DataFrame([data_dict])
         risk_model = RiskModel(data)
@@ -47,6 +47,7 @@ class DataSynthesizer:
         N_Rels = np.random.choice([0, 1, 2, 99])
         HypPlas = np.random.choice([0, 1, 99])
         BiRads = np.random.choice(range(1, 5))
+        menopause_status = np.random.choice([0, 1])
 
         # Create and return the dictionary
         return {
@@ -57,7 +58,8 @@ class DataSynthesizer:
             'Age1st': Age1st,
             'N_Rels': N_Rels,
             'HypPlas': HypPlas,
-            'BiRads': BiRads
+            'BiRads': BiRads,
+            'menopause_status': menopause_status
         }
 
     def convert_numpy_int_to_python_int(self, data):

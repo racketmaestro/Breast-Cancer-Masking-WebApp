@@ -360,6 +360,8 @@ class RiskModel:
             else:
                 BIRADS_risk_adjustment = self.calculateRiskAdjustment(black_BIRADS_dist_premenopause, biRads)
 
+        elif race == 4:
+            BIRADS_risk_adjustment = self.calculateRiskAdjustment(other_BIRADS_dist, biRads)
 
         elif race in [3,5]:
             if menopause_status:
@@ -382,18 +384,18 @@ class RiskModel:
         
         return AbsRisk
 
-    def calculateRiskAdjustment(dist, biRads_score):
+    def calculateRiskAdjustment(self, dist, biRads_score):
         # Calculates the Weight Average Relative Risk (WARR) of each BIRADS distribution
 
         # BIRADS relative risks (RR) (include source here)
         BIRADS_RR_dict = { 
-            "1": 0.5,
-            "2" : 1,
-            "3": 1.6,
-            "4": 2.6
+            "1.0": 0.5,
+            "2.0" : 1,
+            "3.0": 1.6,
+            "4.0": 2.6
             }
 
-        WARR = (dist(0)*BIRADS_RR_dict["1"]) + (dist(1)*BIRADS_RR_dict["2"]) + (dist(2)*BIRADS_RR_dict["3"]) + (dist(3)*BIRADS_RR_dict["4"])
+        WARR = (dist[0]*BIRADS_RR_dict["1.0"]) + (dist[1]*BIRADS_RR_dict["2.0"]) + (dist[2]*BIRADS_RR_dict["3.0"]) + (dist[3]*BIRADS_RR_dict["4.0"])
 
         risk_adjustment = BIRADS_RR_dict[str(biRads_score)]/WARR
 
