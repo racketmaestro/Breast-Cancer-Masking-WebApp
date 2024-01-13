@@ -51,26 +51,26 @@ class ModelController:
         model_data = ModelData()
 
         # Populate the fields
-        model_data.T1 = patient_data.age
-        model_data.AgeMen = patient_data.age_men
-        model_data.Age1st = patient_data.age_at_first_child if patient_data.age_at_first_child is not None else 98
-        model_data.BiRads = patient_data.birad_classification if patient_data.birad_classification is not None else 1
+        model_data.age = patient_data.age
+        model_data.age_menstruation = patient_data.age_men
+        model_data.age_first_child = patient_data.age_at_first_child if patient_data.age_at_first_child is not None else 98
+        model_data.birad_classification = patient_data.birad_classification if patient_data.birad_classification is not None else 1
         # model_data.BiRads = patient_data.birad_classification
 
         # Map number of relatives answer to an integer
-        model_data.N_Rels = ModelController.RELATIVES_MAPPING.get(patient_data.relatives_with_cancer, 99)
+        model_data.num_relatives = ModelController.RELATIVES_MAPPING.get(patient_data.relatives_with_cancer, 99)
 
         # Default values for both variables
-        model_data.N_Biop = 99
-        model_data.HypPlas = 99
+        model_data.num_biopsies = 99
+        model_data.hyperplasia_status = 99
 
         # Update N_Biop based on num_benign_diagnoses
         if patient_data.num_benign_diagnoses == "0":
-            model_data.N_Biop = 0
+            model_data.num_biopsies = 0
         elif patient_data.num_benign_diagnoses == "One":
-            model_data.N_Biop = 1
+            model_data.num_biopsies = 1
         elif patient_data.num_benign_diagnoses == "Two or more":
-            model_data.N_Biop = 2
+            model_data.num_biopsies = 2
 
         # Update menopause_status
         model_data.menopause_status = 1 if patient_data.menopause_status == "Yes" else 0
@@ -78,12 +78,12 @@ class ModelController:
         # Update HypPlas based on atypical_hyperplasia_status if num_benign_diagnoses is known
         if patient_data.num_benign_diagnoses != "Unknown":
             if patient_data.atypical_hyperplasia_status == "Yes":
-                model_data.HypPlas = 1
+                model_data.hyperplasia_status = 1
             elif patient_data.atypical_hyperplasia_status == "No":
-                model_data.HypPlas = 0
+                model_data.hyperplasia_status = 0
 
         # Map race answer to an integer
-        model_data.Race = ModelController.RACE_MAPPING.get(patient_data.ethnicity)
+        model_data.race = ModelController.RACE_MAPPING.get(patient_data.ethnicity)
 
         return model_data
 
