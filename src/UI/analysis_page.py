@@ -115,7 +115,7 @@ class AnalysisPageInterface:
         if birad_category is not None:
             st.write(f"According to our Convolutional Neural Network, your mammogram reveals that you have a BiRad classification of: {birad_category}.")
         else: 
-            st.write(f"Please upload a mammogram so our model can determine your Birad category, this will make a more informed analysis")
+            st.write(f"Please upload a mammogram so our model can determine your Birad category, this will help to make a more informed analysis")
 
         # Displaying the quantitative risk with highlighted numbers
         st.markdown("### Quantitative Risk Assessment")

@@ -3,11 +3,23 @@
 
 ## Project Summary
 
-This project aims to 
+This project aims to provide an accessible platform for users to receive a quick breast cancer risk assessment based on their health data and mammograms. 
 
-[Website](https://breast-cancer-masking-webapp-7bdeafc2e921.herokuapp.com/)
+Risk of breast cancer is known to increase with breast density. However, the current online Breast Cancer Risk Assessment Tool (BCRAT), also known as the [Gail Model](https://bcrisktool.cancer.gov/), only uses select health data to make a quick risk analysis. 
 
-## Setting up virtual environment
+Our risk prediction model extends the Gail Model by incorporating breast density and menopause data, which are factors that affect the risk of breast cancer, to make a more informed risk assessment.
+
+Breast density is determined by running the mammogram through a Convolutional Neural Network Tensorflow model that is trained on the [Mini-DDSM Dataset](https://www.kaggle.com/datasets/cheddad/miniddsm2). The model outputs the probability density function for BI-RADS categories (A, B, C and D). Users or doctors with an available mammogram can easily upload it and fill in the questionnaire on the web app.
+
+Refer to the web app to find out more about the technical details behind our models.
+
+[Streamlit](https://streamlit.io/) library was used to construct the user interface. 
+
+[Check out the web app here!](https://breast-cancer-masking-webapp-7bdeafc2e921.herokuapp.com/)
+
+## Setting up a virtual environment
+
+You can use your preferred way to set up the virtual environment.
 
 ```pip install virtualenv```
 
@@ -44,7 +56,7 @@ Triggered on push or pull requests to the master branch.
 
 - Heroku Deployment: On successful build and test, the app is deployed to Heroku.
 - Conditions: Deployment occurs only if the commit is on master and all tests pass.
-- If any test cases fail or errors in code, stop the merge into master and prevent deployment eployment to Heroku.
+- If any test cases fail or errors in code, stop the merge into master and prevent deployment to Heroku.
 
 **Best Practices**
 
