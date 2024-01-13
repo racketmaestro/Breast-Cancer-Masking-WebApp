@@ -4,7 +4,7 @@ import pandas as pd
 import streamlit as st
 from keras.models import load_model
 from src.patient_data import PatientData
-from src.Model.ModelData import ModelData
+from src.Model.model_data import ModelData
 from PIL import Image
 from src.Model.Gail_ModelV5 import RiskModel
 
@@ -32,7 +32,6 @@ class ModelController:
         "More than one": 2
     }
 
-
     def __init__(self) -> None:
 
         try:
@@ -55,7 +54,8 @@ class ModelController:
         model_data.T1 = patient_data.age
         model_data.AgeMen = patient_data.age_men
         model_data.Age1st = patient_data.age_at_first_child if patient_data.age_at_first_child is not None else 98
-        model_data.BiRads = patient_data.birad_classification
+        model_data.BiRads = patient_data.birad_classification if patient_data.birad_classification is not None else 1
+        # model_data.BiRads = patient_data.birad_classification
 
         # Map number of relatives answer to an integer
         model_data.N_Rels = ModelController.RELATIVES_MAPPING.get(patient_data.relatives_with_cancer, 99)
@@ -71,6 +71,9 @@ class ModelController:
             model_data.N_Biop = 1
         elif patient_data.num_benign_diagnoses == "Two or more":
             model_data.N_Biop = 2
+
+        # Update menopause_status
+        model_data.menopause_status = 1 if patient_data.menopause_status == "Yes" else 0
 
         # Update HypPlas based on atypical_hyperplasia_status if num_benign_diagnoses is known
         if patient_data.num_benign_diagnoses != "Unknown":
@@ -125,30 +128,4 @@ class ModelController:
         birads_classification = np.argmax(prediction) + 1 
 
         return birads_classification
-
-    # def predict_cancer(self, uploaded_file):
-    #     # Read the file into a bytes-like object
-    #     image_data = uploaded_file.read()
-
-    #     # Open the image with PIL (ensures compatibility with different file types)
-    #     image = Image.open(io.BytesIO(image_data))
-
-    #     # Convert the image to grayscale if it's not already
-    #     if image.mode != 'L':
-    #         image = image.convert('L')
-
-    #     # Resize the image
-    #     image = image.resize((128, 128))
-
-    #     # Convert the image to a numpy array
-    #     image_array = np.array(image)
-        
-    #     # Expand dimensions to fit model's expected input
-    #     image_array = np.expand_dims(image_array, axis=0)
-
-    #     # Make prediction
-    #     prediction = self.cancer_detection_model.predict(image_array)
-        
-    #     return prediction
-
 

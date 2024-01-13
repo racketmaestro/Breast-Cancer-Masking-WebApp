@@ -1,5 +1,5 @@
 class ModelData:
-    '''This class defines the data structure of patient information that will go into the prediction model'''
+    '''This class defines the data structure of patient information that will be input into the prediction model'''
     T1: int
     N_Biop: int
     HypPlas: int
@@ -8,6 +8,7 @@ class ModelData:
     N_Rels: int
     Race: int
     BiRads: int
+    menopause_status: int
 
     def to_dict(self):
         '''Returns the information in a dictionary/json format that can be interpreted by the model'''
@@ -20,5 +21,6 @@ class ModelData:
             "Age1st": self.Age1st,
             "N_Rels": self.N_Rels,
             "Race": self.Race,
-            "BiRads": self.BiRads
+            "BiRads": self.BiRads,
+            "menopause_status": self.menopause_status
         }
