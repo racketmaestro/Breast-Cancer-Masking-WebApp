@@ -39,6 +39,7 @@ class AnalysisPageInterface:
         """
         )
 
+        # Load the configuration file which stores the options for the questionnaire
         with open('src/options_config.json', 'r') as config_file:
             config = json.load(config_file)
 
@@ -55,7 +56,7 @@ class AnalysisPageInterface:
         self.patient_info["ethnicity"] = st.selectbox("Ethnicity", config['ethnicities'])
         self.patient_info["relatives_with_cancer"] = st.selectbox("Number of first degree relatives who had breast cancer", config['relatives_with_cancer'])
 
-        # Conditional inputs
+        # Conditional inputs for children and if user has had biopsy
         if st.checkbox("Tick if you have a child/children"):
             self.patient_info["age_at_first_child"] = st.slider("At what age did you have your first child?", **config['age_first_child'])
 
@@ -68,11 +69,10 @@ class AnalysisPageInterface:
             self.patient_info["num_benign_diagnoses"] = st.radio("How many breast biopsies with benign diagnoses:", config['num_benign_diagnoses'])
             self.patient_info["atypical_hyperplasia_status"] = st.radio("Have you ever had a breast biopsy with atypical hyperplasia?", config['atypical_hyperplasia_status'])
 
-        # Submit button logic
+        # Check for mammogram image upload
         if st.button("Submit"):
             if self.patient_info["mammogram_image"] is None:
                 st.error("Please upload a mammogram")   
-                # return 
             else:
                 birad_classification = self.model_controller.predict_birad_classification(self.patient_info["mammogram_image"])
                 self.patient_info["birad_classification"] = birad_classification
@@ -93,7 +93,7 @@ class AnalysisPageInterface:
         self.generate_evaluation(risk_output)
 
     def generate_evaluation(self, risk_output):
-        '''This function generates an evaluation based on the risk_output.'''
+        '''This function generates an evaluation based on the risk_output by the model.'''
 
         # Extracting the values from the risk_output dictionary
         risk_5_year = risk_output["5 Year risk figure"]
