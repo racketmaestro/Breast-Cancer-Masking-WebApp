@@ -34,12 +34,13 @@ class HomePageInterface():
         )
 
         st.markdown("""
-                          ### Contributors
-        - [Amos Koh](https://github.com/racketmaestro)
-        - [Aveek Goswami](https://github.com/magichampz)
-        - [Cameron Briginshaw](https://github.com/CptCold12)
-        - [Low Wei Han](https://github.com/weihanlow)
-        - [David Silcock](https://github.com/dsilcock03)
+        ### Contributors
+        
+        - [Amos Koh](https://www.linkedin.com/in/ak726/)
+        - [Aveek Goswami](https://www.linkedin.com/in/aveekg00/)
+        - [Cameron Briginshaw](https://www.linkedin.com/in/cb1409/)
+        - [Low Wei Han](https://www.linkedin.com/in/whl720/)
+        - [David Silcock](https://www.linkedin.com/in/david-silcock-482674297/)
                     
         [![Source Code](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/racketmaestro/Breast-Cancer-Masking-WebApp)
         """)

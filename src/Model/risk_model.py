@@ -1,6 +1,10 @@
 import numpy as np
 import pandas as pd
 
+# The original risk model code came from Rita Kurban's python iteration of the National Cancer Institute's Breast Cancer Risk Assessment Tool AKA the Gail Model 
+# Source: https://github.com/ritakurban/Practical-Data-Science/blob/master/BCRA_R_to_Python.ipynb
+# See our website for details on our modifications
+
 class RiskModel:
     
     def __init__(self, data):
@@ -11,45 +15,63 @@ class RiskModel:
         # Accessing the data from the attribute
         data = self.data
 
+        # Current age
         T1 = data.at[0, 'T1']
+
+        # Number of breast biopsies
         biopCat = data.at[0, 'N_Biop']
+
+        # Race/ethnicity
         race = data.at[0, 'Race']
+
+        # Age of menarche
         ageMen = data.at[0, 'AgeMen']
+
+        # Age of 1st birth
         age1st = data.at[0, 'Age1st']
+
+        # Number of first-degree relatives who have been diagnosed with breast cancer before
         nRels = data.at[0, 'N_Rels']
+
+        # Whether or not the breast biopsy had atypical hyperplasia
         hypPlas = data.at[0, 'HypPlas']
+
+        # BI-RADS score for breast density
         biRads = data.at[0,'BiRads']
+
+        # Whether or not patient has reached menopause
         menopause_status = data.at[0, 'menopause_status']
         
+        # Initialise factor categories
         menCat = np.nan
         birthCat = np.nan
         relativesCat = np.nan
         hypRiskScale = np.nan
 
-        # Categorising menarchy age
+        # Categorise age of menarche
         if (ageMen >= 14 and ageMen <= T1) or ageMen == 99: menCat = 0  
         elif ageMen >= 12 and ageMen < 14: menCat = 1
         elif ageMen > 7 and ageMen < 12: menCat = 2      
 
-        if menCat == 2 and race == 2: menCat = 1 #  for African-Americans AgeMen code 2 (age <= 11) grouped with code 1(age == 12 or 13)
+        if menCat == 2 and race == 2: menCat = 1 # Exception for for African-Americans: AgeMen code 2 (age <= 11) grouped with code 1(age == 12 or 13)
 
-        # Categorising age of first birth
+        # Categorise age of first birth
         if age1st < 20 or age1st == 99: birthCat = 0
         elif age1st >= 20 and age1st < 25: birthCat = 1
         elif (age1st >= 25 and age1st < 30) or age1st == 98: birthCat = 2
         elif age1st >= 30 and age1st < 98: birthCat = 3
         elif age1st > T1 and age1st < 98: birthCat = np.nan
         
-        if race == 2: birthCat = 0 # for African-Americans Age1st is not a RR covariate and not in RR model, set to 0
+        if race == 2: birthCat = 0 # Exception for African-Americans: Age1st is not a RR covariate and not in RR model, set to 0
 
-        ## Categorising number of relatives with BRCA gene
+        # Categorise number of relatives who have been diagnosed with breast cancer before
         if nRels == 0 or nRels == 99: relativesCat = 0
         elif nRels == 1: relativesCat = 1
         elif nRels >= 2 and nRels < 99: relativesCat = 2
         
-        if (race >= 6 and race <= 11) and relativesCat == 2: relativesCat = 1 # for Asians relativesCat = 2 is pooled with relativesCat = 1
+        if (race >= 6 and race <= 11) and relativesCat == 2: relativesCat = 1 # Exception for Asians: relativesCat = 2 is pooled with relativesCat = 1
 
-        # Scaling by the risk of hyperplasia
+        # Scale by the risk of hyperplasia
         if biopCat == 0:
             hypRiskScale = 1.00
         elif biopCat > 0:
@@ -60,12 +82,13 @@ class RiskModel:
             elif hypPlas == 99:
                 hypRiskScale = 1.00
         
+        # Exceptions for hispanics
         ### hispanic RR model from San Francisco Bay Area Breast Cancer Study (SFBCS):
-        ###         (1) groups N_Biop ge 2 with N_Biop eq 1
-        ###         (2) eliminates  AgeMen from model for US Born hispanic women
-        ###         (3) group Age1st=25-29 with Age1st=20-24 and code as 1
-        ###             for   Age1st=30+, 98 (nulliparous)       code as 2
-        ###         (4) groups N_Rels=2 with N_Rels=1;
+        ### (1) groups N_Biop ge 2 with N_Biop eq 1
+        ### (2) eliminates AgeMen from model for US Born hispanic women
+        ### (3) group Age1st=25-29 with Age1st=20-24 and code as 1
+        ###      for   Age1st=30+, 98 (nulliparous) code as 2
+        ### (4) groups N_Rels=2 with N_Rels=1;
         if biopCat == 99: biopCat = 0
         if race in [3,5] and biopCat in [0,99]: biopCat = 0
         if race in [3,5] and biopCat == 2: biopCat = 1
@@ -74,19 +97,20 @@ class RiskModel:
         if race in [3,5] and birthCat == 3: birthCat = 2
         if race in [3,5] and relativesCat == 2: relativesCat = 1
 
-
-        # race == 1 : "Wh"      white SEER 1983:87 BrCa Rate
-        # race == 2 : "AA"      african-american
-        # race == 3 : "HU"      hispanic-american (US born)
-        # race == 4 : "NA"      other (native american and unknown race)
-        # race == 5 : "HF"      hispanic-american (foreign born)
-        # race == 6 : "Ch"      chinese
-        # race == 7 : "Ja"      japanese
-        # race == 8 : "Fi"      filipino
-        # race == 9 : "Hw"      hawaiian
-        # race == 10 : "oP"     other pacific islander
-        # race == 11 : "oA"     other asian
-            
+        ### Race/ethnicity categories 
+        # race == 1 : "Wh"      White
+        # race == 2 : "AA"      African-american
+        # race == 3 : "HU"      Hispanic-american (US born)
+        # race == 4 : "NA"      Other (native american and unknown race)
+        # race == 5 : "HF"      Hispanic-american (foreign born)
+        # race == 6 : "Ch"      Chinese
+        # race == 7 : "Ja"      Japanese
+        # race == 8 : "Fi"      Filipino
+        # race == 9 : "Hw"      Hawaiian
+        # race == 10 : "oP"     Other pacific islander
+        # race == 11 : "oA"     Other asian
+        
+        # Create a new DataFrame with categories
         recodedData = pd.DataFrame({
             'T1': [T1],
             'biopCat': [biopCat],
@@ -103,6 +127,9 @@ class RiskModel:
 
     def relative_risk(self):
         data = self.data
+
+        # Establish each race's beta coefficients for each relative risk factor
+        # Data from the original risk model code
         White_Beta = np.array([[0.3925, 0.0940103059, 
                                 0.1885, 0.701, 
                                 -0.2880424830, -0.1908113865]])
@@ -120,11 +147,14 @@ class RiskModel:
         Asian_Beta = np.array([[0.55263612260619, 0.07499257592975, 
                                 0.27638268294593, 0.79185633720481, 
                                 0.0, 0.0]])
+        
+        # Concatenate all beta values for more accessibility
         Wrk_Beta_all = np.concatenate((White_Beta, Black_Beta, Hspnc_Beta, 
                                     Other_Beta, FHspnc_Beta, Asian_Beta, 
                                     Asian_Beta, Asian_Beta, Asian_Beta, 
                                     Asian_Beta, Asian_Beta))
-        # Obtain covariates using recode_check function
+        
+        # Obtain covariates using recode function
         check_cov = self.recode()
 
         # Extract covariates
@@ -134,32 +164,34 @@ class RiskModel:
         relativesCat = check_cov.at[0,'relativesCat']
         hypRiskScale = check_cov.at[0,'hypRiskScale']
         race = check_cov.at[0,'race']
-        
 
         # Select the appropriate beta coefficients
         Beta = Wrk_Beta_all[race-1]
 
-        # Check if all covariates are available to calculate LP1 and LP2
+        # Calculate logistic predictors LP1 and LP2
         if not np.isnan(birthCat):
             LP1 = biopCat * Beta[0] + menCat * Beta[1] + birthCat * Beta[2] + relativesCat * Beta[3] + birthCat * relativesCat * Beta[5] + np.log(hypRiskScale)
             LP2 = LP1 + biopCat * Beta[4]
         else:
             LP1 = LP2 = np.nan
 
-        # Calculate Relative Risks
+        # Calculate Relative Risks, RR_Star1 for ages < 50 and RR_Star2 for ages >= 50
         RR_Star1 = np.exp(LP1) if not np.isnan(LP1) else np.nan
         RR_Star2 = np.exp(LP2) if not np.isnan(LP2) else np.nan
 
-        # Create a DataFrame for the result
+        # Create a DataFrame for the Relative Risk results
         RR_Star = pd.DataFrame({'RR_Star1': [RR_Star1], 'RR_Star2': [RR_Star2]})
 
         return RR_Star
 
     def absolute_risk(self, lifetime):
         data = self.data
-### set up lambda1*, lambda2, beta & F(t) with known constants used in the nci brca risk disk
-    ## lambda1_Star, BrCa composite incidences
-    # SEER BrCa incidence rates (current) non-hispanic white women, SEER white 1983:87
+
+        ### Set up lambda1*, lambda2, beta & F(t) with known constants used in the nci brca risk disk
+        ## lambda1_Star, BrCa composite incidences
+        # Data from the original risk model code
+        
+        # SEER BrCa incidence rates (current) non-hispanic white women, SEER white 1983:87
         White_lambda1 = np.array([[0.00001000, 0.00007600, 0.00026600, 0.00066100, 0.00126500, 0.00186600, 0.00221100, 
                         0.00272100, 0.00334800, 0.00392300, 0.00417800, 0.00443900, 0.00442100, 0.00410900]])
         # SEER BrCa incidence rates for "avg" non-hispanic white women and "avg" other (native american) women, SEER white 1992:96
@@ -205,7 +237,7 @@ class RiskModel:
                         0.001048462801, 0.001372467817, 0.001495473711, 0.001646746198, 0.001478363563,
                         0.001216010125, 0.001067663700, 0.001376104012, 0.000661576644]])
         ## lambda2, Competing hazards
-        #nchs competing mortality (current) for non-hispanic white women, NCHS white 1985:87
+        # nchs competing mortality (current) for non-hispanic white women, NCHS white 1985:87
         White_lambda2 = np.array([[0.00049300, 0.00053100, 0.00062500, 0.00082500, 0.00130700, 0.00218100, 0.00365500, 
                         0.00585200, 0.00943900, 0.01502800, 0.02383900, 0.03883200, 0.06682800, 0.14490800]])
         # nchs competing mortality for "avg" non-hispanic white women and "avg" other (native american) women, NCHS white 1992:96
@@ -250,7 +282,8 @@ class RiskModel:
         OtrAs_lambda2 = np.array([[0.000212632332, 0.000242170741, 0.000301552711, 0.000369053354, 0.000543002943,
                         0.000893862331, 0.001515172239, 0.002574669551, 0.004324370426, 0.007419621918,
                         0.013251765130, 0.022291427490, 0.041746550635, 0.087485802065]])
-        # F(t), 1-Attributable Risk=F(t) 
+        
+        # F(t), 1-Attributable Risk = F(t) 
         White_1_AR = np.array([[0.5788413, 0.5788413]])
         Black_1_AR = np.array([[0.72949880, 0.74397137]])
         Hspnc_1_AR = np.array([[0.749294788397, 0.778215491668]])
@@ -258,13 +291,13 @@ class RiskModel:
         FHspnc_1_AR = np.array([[0.428864989813, 0.450352338746]])
         Asian_1_AR = np.array([[0.47519806426735, 0.50316401683903]])
 
-        # initialize rate vectors with the correct rates for each woman under study based on her race
-        # for i=1 to 11, when Race=i, Wrk_lambda1=Wrk_lambda1_all[i], Wrk_lambda2=Wrk_lambda2_all[i], Wrk_Beta=Wrk_Beta_all[i], Wrk_1_AR=Wrk_1_AR_all[i]
+        ## Initialise rate vectors with the correct rates for each woman under study based on her race
+        # For i=1 to 11, when Race=i, Wrk_lambda1=Wrk_lambda1_all[i], Wrk_lambda2=Wrk_lambda2_all[i], Wrk_Beta=Wrk_Beta_all[i], Wrk_1_AR=Wrk_1_AR_all[i]
         Wrk_lambda1_all = np.concatenate((White_lambda1, Black_lambda1, Hspnc_lambda1, Other_lambda1, FHspnc_lambda1, Chnes_lambda1, Japns_lambda1, Filip_lambda1, Hawai_lambda1, OtrPI_lambda1, OtrAs_lambda1))
         Wrk_lambda2_all = np.concatenate((White_lambda2, Black_lambda2, Hspnc_lambda2, Other_lambda2, FHspnc_lambda2, Chnes_lambda2, Japns_lambda2, Filip_lambda2, Hawai_lambda2, OtrPI_lambda2, OtrAs_lambda2)) 
         Wrk_1_AR_all = np.concatenate((White_1_AR, Black_1_AR, Hspnc_1_AR, Other_1_AR, FHspnc_1_AR, Asian_1_AR, Asian_1_AR, Asian_1_AR, Asian_1_AR, Asian_1_AR, Asian_1_AR))
         
-        # Recode data and calculate relative risk
+        # Obtain data from recode function and relative risks from relative_risk function
         recoded_data = self.recode()
         rr_star = self.relative_risk()
 
@@ -274,16 +307,19 @@ class RiskModel:
         T1 = obs['T1']
         biRads =obs['biRads']
         menopause_status = obs['menopause_status']
+
+        # Check if function wants 5-year risk or lifetime risk
         if lifetime == 1:
             T2 = 90
         else:
             T2 = T1 + 5
         
+        # Obtain specific relative risk values
         rrstar1 = rr_star['RR_Star1'].iloc[0]
         rrstar2 = rr_star['RR_Star2'].iloc[0]
 
+        # Initialise One_AR_RR, combining F(t) and relative risk
         One_AR_RR = np.repeat(np.nan, 70) 
-
         One_AR1 = Wrk_1_AR_all[race-1,0]
         One_AR2 = Wrk_1_AR_all[race-1,1]
 
@@ -291,26 +327,33 @@ class RiskModel:
         One_AR_RR1 = One_AR1*rrstar1
         # (1-AR)*RR at ages >= 50
         One_AR_RR2 = One_AR2*rrstar2
-        # define One_AR_RR
+
+        # Define final One_AR_RR
         One_AR_RR[0:30] = One_AR_RR1
         One_AR_RR[30:70] = One_AR_RR2
 
-        # Compute Absolute Risk
+        ## Compute Absolute Risk
+        # Set up age intervals
         Strt_Intvl = int(np.floor(T1) - 20 + 1)
         End_Intvl = int(np.ceil(T2) - 20)
         NumbrIntvl = int(np.ceil(T2) - np.floor(T1))
+
+        # Initialise Risk Work and Cumulative Lambda
         RskWrk = 0
         Cum_lambda = 0
 
+        # Initialise temporary lambda arrays
         lambda1_temp = np.zeros((14, 5))
         lambda2_temp = np.zeros((14, 5))
 
+        # Temporary lambda arrays store incidence rates and competing mortality rates for each age interval
         for v in range(lambda1_temp.shape[1]):
             lambda1_temp[:,v] = Wrk_lambda1_all[race-1,:]
             lambda2_temp[:,v] = Wrk_lambda2_all[race-1,:]
         lambda1 = lambda1_temp.flatten()
         lambda2 = lambda2_temp.flatten()
 
+        # Risk calculation which loops for each age interval
         for j in range(NumbrIntvl):
             j_intvl = Strt_Intvl+j-1
             if NumbrIntvl>1 and j>0 and j<NumbrIntvl-1:
@@ -325,15 +368,24 @@ class RiskModel:
 
             if NumbrIntvl==0:
                 IntgrlLngth = (T2-T1)
+
+            # Combined hazard for interval j - combining both breast cancer risk and competing mortality
             lambdaj = lambda1[j_intvl]*One_AR_RR[j_intvl]+lambda2[j_intvl]
-                
+            
+            # PI - Incremental probability of developing breast cancer in the interval j
             PI_j = ((One_AR_RR[j_intvl]*lambda1[j_intvl]/lambdaj)*np.exp(-Cum_lambda))*(1-np.exp(-lambdaj*IntgrlLngth))
+
+            # Add incremental risk to Risk Work and update cumulative lambda
             RskWrk = RskWrk+PI_j 
             Cum_lambda = Cum_lambda+lambdaj*IntgrlLngth
 
+        # Calculate Absolute Risk
         AbsRisk = 100 * RskWrk
 
-        # Probability distributions of BIRADS scores based on race (include source here)
+        ## Adjust absolute risk based on BI-RADS categories
+        # Probability distributions of BI-RADS categories based on race, data sourced from a study by Gao, Y. and Heller, S.L., published on RSNA RadioGraphics Vol. 42, No. 7
+        # Source: https://pubs.rsna.org/doi/full/10.1148/rg.220074#:~:text=Breast%20Density,-Asian%20women%20collectively&text=It%20is%20notable%20that%2027.5,non-Hispanic%20White%20American%20women
+        # No data could be found for 'Other' Races, so we assumed a normal distribution with a mean of 2.5 and standard deviation of 1
         asian_BIRADS_dist_premenopause = [0.015, 0.172, 0.537, 0.275]
         asian_BIRADS_dist_postmenopause = [0.07, 0.382, 0.447, 0.101]
         white_BIRADS_dist_premenopause = [0.051, 0.326, 0.469, 0.144]
@@ -343,20 +395,20 @@ class RiskModel:
         hispanic_BIRADS_dist_premenopause = [0.069, 0.366, 0.454, 0.111]
         hispanic_BIRADS_dist_postmenopause = [0.172, 0.519, 0.272, 0.037]
         other_BIRADS_dist = [0.1587, 0.3413, 0.3413, 0.1587]
+
+        # Initialise risk adjustment based on BI-RADS categories
         BIRADS_risk_adjustment = 0
 
+        # Calculate risk adjustment based on race and menopause status
         if race == 1:
             if menopause_status:
                 BIRADS_risk_adjustment = self.calculateRiskAdjustment(white_BIRADS_dist_postmenopause, biRads)
-
             else:
                 BIRADS_risk_adjustment = self.calculateRiskAdjustment(white_BIRADS_dist_premenopause, biRads)
 
-            
         elif race ==2:
             if menopause_status:
                 BIRADS_risk_adjustment = self.calculateRiskAdjustment(black_BIRADS_dist_postmenopause, biRads)
-
             else:
                 BIRADS_risk_adjustment = self.calculateRiskAdjustment(black_BIRADS_dist_premenopause, biRads)
 
@@ -366,28 +418,23 @@ class RiskModel:
         elif race in [3,5]:
             if menopause_status:
                 BIRADS_risk_adjustment = self.calculateRiskAdjustment(hispanic_BIRADS_dist_postmenopause, biRads)
-
             else:
                 BIRADS_risk_adjustment = self.calculateRiskAdjustment(hispanic_BIRADS_dist_premenopause, biRads)
-
 
         elif race in range(6,12):
             if menopause_status:
                 BIRADS_risk_adjustment = self.calculateRiskAdjustment(asian_BIRADS_dist_postmenopause, biRads)
-
             else:
                 BIRADS_risk_adjustment = self.calculateRiskAdjustment(asian_BIRADS_dist_premenopause, biRads)
 
+        # Calculate adjusted Absolute Risk
         AbsRisk = AbsRisk * BIRADS_risk_adjustment
 
-
-        
         return AbsRisk
 
     def calculateRiskAdjustment(self, dist, biRads_score):
-        # Calculates the Weight Average Relative Risk (WARR) of each BIRADS distribution
-
-        # BIRADS relative risks (RR) (include source here)
+        ## BI-RADS relative risks (RR), data sourced from a publication by the Clinical Oncology Society of Australia
+        # Source: https://www.cosa.org.au/media/332779/breast_density_facts_issues_final_approved_5march2021.pdf
         BIRADS_RR_dict = { 
             "1.0": 0.5,
             "2.0" : 1,
@@ -395,24 +442,40 @@ class RiskModel:
             "4.0": 2.6
             }
 
+        # Calculate the Weight Average Relative Risk (WARR) of each BIRADS distribution
         WARR = (dist[0]*BIRADS_RR_dict["1.0"]) + (dist[1]*BIRADS_RR_dict["2.0"]) + (dist[2]*BIRADS_RR_dict["3.0"]) + (dist[3]*BIRADS_RR_dict["4.0"])
 
+        # Calculate risk adjustment based on BI-RADS relative risk
         risk_adjustment = BIRADS_RR_dict[str(biRads_score)]/WARR
 
         return risk_adjustment
 
     def run_model(self):
+        # Calculate the 5-Year Absolute Risk and Lifetime Absolute Risk 
         absRisk5 = self.absolute_risk(0)
         absRiskLifetime = self.absolute_risk(1)
+        
+        # Initialise qualitative risk assesments
+        qualRisk5 = "N/A"
+        qualRiskLife = "N/A"
 
-        riskDict = {1: "Low", 2: "Medium", 3: "High"}
+        # Determine the qualitative risk assessment (Low, Medium or High) based on the absolute risk value
+        # Based on the Gail Model's definitions of low/high risk
+        if absRisk5 <= 1.66:
+            qualRisk5 = "Low"
+        elif absRisk5 > 1.66 and absRisk5 < 4.0:
+            qualRisk5 = "Medium"
+        if absRisk5 >= 4.0:
+            qualRisk5 = "High"
 
-        riskIndex5 = np.ceil(absRisk5 / 100 * 3) if not np.isnan(absRisk5) else None
-        riskIndexLifetime = np.ceil(absRiskLifetime / 100 * 3) if not np.isnan(absRiskLifetime) else None
-
-        qualRisk5 = riskDict.get(riskIndex5, "Unknown")
-        qualRiskLife = riskDict.get(riskIndexLifetime, "Unknown")
-
+        if absRiskLifetime <= 10.15:
+            qualRiskLife = "Low"
+        elif absRiskLifetime > 10.15 and absRiskLifetime < 25.0:
+            qualRiskLife = "Medium"
+        elif absRiskLifetime >= 25.0:
+            qualRiskLife = "High"
+        
+        # Export absolute risk figures and qualitative assessments as a dictionary
         riskDict = {
             "5 Year risk figure": absRisk5, 
             "Lifetime risk figure": absRiskLifetime, 

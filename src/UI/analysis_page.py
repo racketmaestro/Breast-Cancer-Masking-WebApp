@@ -35,7 +35,7 @@ class AnalysisPageInterface:
         """
         # Breast Cancer Risk Evaluation
 
-        ### Upload a mammmogram and input your information, our model will evaluate the risk of breast cancer :computer:
+        ### Upload a mammogram and fill up the questionnaire, our model will evaluate the risk of breast cancer :computer:
         """
         )
 

@@ -9,6 +9,8 @@ from PIL import Image
 from src.Model.risk_model import RiskModel
 
 class ModelController:
+    '''This class is the system which interacts with the risk prediction model and BI-RADS classification model.
+    It also facilitates the flow and transformation of patient data and model data, which necessary for the models' functionalities.'''
 
     # Define integer representations for race
     RACE_MAPPING = {
@@ -55,7 +57,6 @@ class ModelController:
         model_data.age_menstruation = patient_data.age_men
         model_data.age_first_child = patient_data.age_at_first_child if patient_data.age_at_first_child is not None else 98
         model_data.birad_classification = patient_data.birad_classification if patient_data.birad_classification is not None else 1
-        # model_data.BiRads = patient_data.birad_classification
 
         # Map number of relatives answer to an integer
         model_data.num_relatives = ModelController.RELATIVES_MAPPING.get(patient_data.relatives_with_cancer, 99)
