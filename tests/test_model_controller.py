@@ -1,4 +1,4 @@
-from src.Model.ModelController import ModelController
+from src.Model.model_controller import ModelController
 import pytest
 
 @pytest.fixture

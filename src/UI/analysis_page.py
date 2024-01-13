@@ -1,8 +1,7 @@
 import json
 import streamlit as st
 from src.patient_data import PatientData
-from src.Model.ModelController import ModelController
-from src.Model.ModelData import ModelData
+from src.Model.model_controller import ModelController
 
 class AnalysisPageInterface:
     '''
@@ -25,7 +24,8 @@ class AnalysisPageInterface:
             "age_at_first_child": None,
             "num_benign_diagnoses": None,
             "atypical_hyperplasia_status": None,
-            "birad_classification": None
+            "birad_classification": None,
+            "menopause_status" : None
         }
 
 
@@ -50,7 +50,6 @@ class AnalysisPageInterface:
             # Display the uploaded file directly
             st.image(self.patient_info["mammogram_image"], caption='Uploaded Image', width=300)
 
-
         self.patient_info["age"] = st.slider("Age", **config['age_range'])
         self.patient_info["age_men"] = st.slider("Age of first Menstrual Period", **config['age_men_range'])
         self.patient_info["ethnicity"] = st.selectbox("Ethnicity", config['ethnicities'])
@@ -69,10 +68,11 @@ class AnalysisPageInterface:
             self.patient_info["num_benign_diagnoses"] = st.radio("How many breast biopsies with benign diagnoses:", config['num_benign_diagnoses'])
             self.patient_info["atypical_hyperplasia_status"] = st.radio("Have you ever had a breast biopsy with atypical hyperplasia?", config['atypical_hyperplasia_status'])
 
+        self.patient_info["menopause_status"] = st.radio("Have you been through menopause?", config['menopause_status'])
         # Check for mammogram image upload
         if st.button("Submit"):
             if self.patient_info["mammogram_image"] is None:
-                st.error("Please upload a mammogram")   
+                st.error("Please upload a mammogram if available")   
             else:
                 birad_classification = self.model_controller.predict_birad_classification(self.patient_info["mammogram_image"])
                 self.patient_info["birad_classification"] = birad_classification
@@ -115,7 +115,7 @@ class AnalysisPageInterface:
         if birad_category is not None:
             st.write(f"According to our Convolutional Neural Network, your mammogram reveals that you have a BiRad classification of: {birad_category}.")
         else: 
-            st.write(f"Please upload a mammogram so our model can determine your Birad category")
+            st.write(f"Please upload a mammogram so our model can determine your Birad category, this will make a more informed analysis")
 
         # Displaying the quantitative risk with highlighted numbers
         st.markdown("### Quantitative Risk Assessment")
