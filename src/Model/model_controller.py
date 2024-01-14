@@ -140,7 +140,7 @@ class ModelController:
             # Check that the probability output is above a certain threshold
             probability_of_chosen_class = prediction[0, birads_classification - 1]
             print(prediction)
-            if probability_of_chosen_class <= 0.8:
+            if probability_of_chosen_class <= 0.5:
                 st.error('''
                         Our model could not decisively predict your breast density based on the mammogram, 
                         perhaps check that you have uploaded the correct image or find another mammogram''')

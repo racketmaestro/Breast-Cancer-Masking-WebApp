@@ -2,3 +2,4 @@ streamlit
 pytest
 pandas
 tensorflow-cpu
+opencv-python
