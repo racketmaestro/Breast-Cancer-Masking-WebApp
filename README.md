@@ -28,6 +28,7 @@ You can use your preferred way to set up the virtual environment.
 Create the virtual environment: `virtualenv <your_venv_name>` 
 
 Activate the virtual environment: `.\<your_venv_name>\Scripts\activate.bat` 
+Activate virtual environment (Mac): `source <your_venv_name>/bin/activate`
 
 Install the dependencies in the virtual environment: ```pip install -r  requirements.txt```
 
