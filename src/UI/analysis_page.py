@@ -35,7 +35,7 @@ class AnalysisPageInterface:
         """
         # Breast Cancer Risk Evaluation
 
-        ### Upload a mammmogram and input your information, our model will evaluate the risk of breast cancer :computer:
+        ### Upload a mammogram and fill up the questionnaire, our model will evaluate the risk of breast cancer :computer:
         """
         )
 
@@ -115,7 +115,7 @@ class AnalysisPageInterface:
         if birad_category is not None:
             st.write(f"According to our Convolutional Neural Network, your mammogram reveals that you have a BiRad classification of: {birad_category}.")
         else: 
-            st.write(f"Please upload a mammogram so our model can determine your Birad category, this will make a more informed analysis")
+            st.write(f"Please upload a mammogram so our model can determine your Birad category, this will help to make a more informed analysis")
 
         # Displaying the quantitative risk with highlighted numbers
         st.markdown("### Quantitative Risk Assessment")
@@ -135,5 +135,21 @@ class AnalysisPageInterface:
             st.write("Continue with regular screenings and check-ups as recommended by your healthcare provider.")
         
         st.write("Please note that these assessments are based on statistical models and should not replace professional medical advice.")
-
-
+        st.markdown('''
+        > ℹ️ **Note:** **Disclaimer: Important Limitations of Our Breast Cancer Risk Assessment Tool**
+        >         
+        > This risk assessment tool is not designed for individuals who have previously been diagnosed with breast cancer.
+        The estimates and calculations provided by our tool are based on data from individuals who have not had a prior breast cancer diagnosis.
+        If you have been diagnosed with breast cancer, we recommend seeking personalized advice and risk assessment from a healthcare professional.
+        ?          
+        > Our tool does not account for the increased risk associated with BRCA1 or BRCA2 gene mutations. Individuals with these genetic mutations 
+        have a higher risk of developing breast cancer, which our assessment tool does not currently evaluate. If you are aware of carrying BRCA1
+        or BRCA2 gene mutations, please consult with a genetic counselor or a medical professional for a more appropriate risk assessment.
+        >         
+        > The data used in our risk assessment model are exclusively sourced from patients from the United States. Therefore, the risk estimates may
+        not be fully representative of individuals from other countries or with different ethnic backgrounds. The risk factors and their prevalence
+        can vary significantly across different populations.
+        >            
+        > In our model, the incorporation of breast density as a risk factor is based on an estimation that utilizes the probability distribution of breast density. While breast density is a recognized factor in breast cancer risk, our method of incorporating it is an estimation as the original Gail Model does not include it as a factor. Therefore, our predictions should be interpreted with caution. 
+        Please Note: The information provided by our Breast Cancer Risk Assessment Tool is for educational purposes only and is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health providers with any questions you may have regarding a medical condition.
+        ''')

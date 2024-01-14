@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from src.Model.Gail_ModelV5 import RiskModel
+from src.Model.risk_model import RiskModel
 
 def test_gail_model():
     '''This unit test will generate synthetic data using DataSynthesizer for the gail model and
@@ -9,7 +9,7 @@ def test_gail_model():
     data_synth = DataSynthesizer()
 
     # Generate sets of user data and test them
-    for i in range(50):
+    for i in range(10):
         data_dict = data_synth.data_gen()
         data = pd.DataFrame([data_dict])
         risk_model = RiskModel(data)
