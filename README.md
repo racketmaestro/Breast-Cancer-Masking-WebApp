@@ -15,7 +15,7 @@ Refer to the web app to find out more about the technical details behind our mod
 
 [Streamlit](https://streamlit.io/) library was used to construct the user interface. 
 
-[Check out the web app here!](https://breast-cancer-masking-webapp-7bdeafc2e921.herokuapp.com/)
+[Check out the web app here!](https://breast-cancer-masking-webapp-7bdeafc2e921.herokuapp.com/) Sample images are available in the repository to try out.
 
 ## Setting up a virtual environment
 
@@ -28,7 +28,8 @@ You can use your preferred way to set up the virtual environment.
 Create the virtual environment: `virtualenv <your_venv_name>` 
 
 Activate the virtual environment: `.\<your_venv_name>\Scripts\activate.bat` 
-Activate virtual environment (Mac): `source <your_venv_name>/bin/activate`
+
+Activate virtual environment (macOS): `source <your_venv_name>/bin/activate`
 
 Install the dependencies in the virtual environment: ```pip install -r  requirements.txt```
 
