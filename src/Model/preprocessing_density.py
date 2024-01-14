@@ -90,7 +90,7 @@ def crop_roi(mask, og_image, height_og, width_og):
         final_img = og_image[int(y - box_hei / 2) : int(y + box_hei / 2), x:x_end]
 
     else:
-        final_image = og_image
+        final_img = og_image
         print("image error")
 
     return final_img
