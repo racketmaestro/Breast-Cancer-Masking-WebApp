@@ -51,17 +51,13 @@ class HomePageInterface:
         markdown_content = load_markdown_file(markdown_file_path)
         st.markdown(markdown_content, unsafe_allow_html=True)
 
-        st.markdown(
-            """
-        
-        ### Image Processing Pipeline Demonstration <br>
-        <img width="250" padding-right=50px alt="flask 3" src=images/processing.png/>
-                    """
-        )
+        st.markdown("### Image Processing Pipeline Demonstration")
+
+        st.image("src/UI/images/processing.png")
 
         st.markdown(
-            """
-                    ---
+        """
+        ---
         ### Contributors
         
         - [Amos Koh](https://www.linkedin.com/in/ak726/)
