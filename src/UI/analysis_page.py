@@ -77,8 +77,11 @@ class AnalysisPageInterface:
                 if self.patient_info["mammogram_image"] is None:
                     st.error("Please upload a mammogram if available")   
                 else:
-                    birad_classification = self.model_controller.predict_birad_classification(self.patient_info["mammogram_image"])
-                    self.patient_info["birad_classification"] = birad_classification
+                    try:
+                        birad_classification = self.model_controller.predict_birad_classification(self.patient_info["mammogram_image"])
+                        self.patient_info["birad_classification"] = birad_classification
+                    except Exception as e:
+                        st.error(f"An error occurred trying to process the mammogram image, please check that the correct file was uploaded or try another mammogram if possible")
 
                 # Set the patient data to the inputs attained from the UI
                 self.patient_data.set_data(**self.patient_info)
