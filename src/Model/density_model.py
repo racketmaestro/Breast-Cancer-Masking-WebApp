@@ -6,7 +6,18 @@ The model was trained on google colab, and the paths represent the directories w
 
 import tensorflow as tf
 
+# initialize parameters
+BATCH_SIZE = 25
+NUM_EPOCHS_FINAL_LAYERS = 10
+NUM_EPOCHS_FULL_MODEL = 100
+BASE_MODEL = "EFFB0"
+MODEL_VERSION = 1
+INPUT_SHAPE = (128, 128, 3)
+POOLING = "avg"
+WEIGHT = "/content/drive/MyDrive/silcock-sons/noisy.student.notop-b0.h5"
 
+
+# load datasets
 train_ds = tf.keras.utils.image_dataset_from_directory(
     "/content/drive/MyDrive/silcock-sons/cbis-data-roi/train",
     batch_size=None,
@@ -20,31 +31,23 @@ test_ds = tf.keras.utils.image_dataset_from_directory(
     color_mode="rgb",
 )
 
-BATCH_SIZE = 25
-NUM_EPOCHS_FINAL_LAYERS = 10
-NUM_EPOCHS_FULL_MODEL = 100
-BASE_MODEL = "EFFB0"
-MODEL_VERSION = 1
-INPUT_SHAPE = (128, 128, 3)
-POOLING = "avg"
-WEIGHT = "/content/drive/MyDrive/silcock-sons/noisy.student.notop-b0.h5"
-
+# batch datasets
 train_size = len(train_ds)
 train_ds = train_ds.cache().batch(BATCH_SIZE).prefetch(tf.data.AUTOTUNE)
 val_ds = test_ds.cache().batch(BATCH_SIZE).prefetch(tf.data.AUTOTUNE)
 
-# Initialize the model
+# Initialize the Efficent Net model
 base = tf.keras.applications.EfficientNetB0(
     include_top=False,
-    weights=WEIGHT,  # Here we are using Noisy Student Weights that was passed in args
+    weights=WEIGHT,  # Here we are using Noisy Student Weights
     input_shape=INPUT_SHAPE,
     pooling=POOLING,
-)  # Pooling is 'avg'
+)
 
 base.trainable = False  # freezing the base layers
-model_name = f"model-2"
+model_name = f"BiradClassificationModel"
 
-# Adding the final Dense layers with some Dropout
+# Adding the final Dense layers with some Dropout, and a dense layer with 4 nodes for 4 output classes
 layer1 = base.output
 layer1 = tf.keras.layers.Dropout(0.1, name="pooling_drop")(layer1)
 layer2 = tf.keras.layers.Dense(1024, name="hidden_dense", activation="relu")(layer1)
@@ -52,23 +55,20 @@ layer2 = tf.keras.layers.Dropout(0.1, name="hidden2_drop")(layer2)
 quality = tf.keras.layers.Dense(4, activation="softmax", name="quality")(layer2)
 model = tf.keras.models.Model(base.input, outputs=quality, name=model_name)
 
-# As per the training workflow, we will freeze the original effnet network
+# Freeze the original efficient net network
 # And train the newly attached layers at a higher learning rate
 # Train for a few epochs first then unfreeze and train at a lower learning rate
-# Feel free to experiment with other optimizers like tf.keras.optimizers.Adam(lr=1e-3, decay=1e-6),
 model.compile(
     optimizer=tf.keras.optimizers.SGD(
         learning_rate=1e-2, weight_decay=1e-6, momentum=0.9
     ),  # Using a slighty higher Learning rate of 1e-2
     loss=tf.keras.losses.SparseCategoricalCrossentropy(),
-)  # No need to log metrics yet
+)
 print("Model compiled for initial training of final layers. Summary:")
 # print(model.summary(show_trainable=True))
 
-
-# Because we will still need to do the finetuning step
 history = model.fit(
-    train_ds,  # No need for callbacks and validation layers
+    train_ds,
     epochs=NUM_EPOCHS_FINAL_LAYERS,
     batch_size=BATCH_SIZE,
     verbose=2,
@@ -78,8 +78,8 @@ history = model.fit(
 # Modify which layers are trainable
 # Here we are unfreezing some of the other blocks of the newtwork
 # To do finetuning.
-# I chose to unfreeze from block 6 onwards
-# Determine what layer number does block 6 start from
+# I chose to unfreeze from block 4 onwards
+# Determine what layer number does block 4 start from
 start_layer_num = 0
 for layer_number in range(len(model.layers)):
     if model.layers[layer_number].name.startswith("block4"):

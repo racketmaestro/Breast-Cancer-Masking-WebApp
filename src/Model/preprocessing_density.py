@@ -1,5 +1,5 @@
 """
-Function to process and crop out the region of interest for the mammogram images
+Functions to process and crop out the region of interest for the mammogram images
 """
 
 import numpy as np
@@ -82,7 +82,8 @@ def crop_roi(mask, og_image, height_og, width_og):
         # cv2.rectangle(img_copy, ( x, int(y-box_hei/2)), (x+box_wid, int(y+box_hei/2)), (255, 0, 0) , 20)
 
     else:
-        print("error with image")
+        final_image = og_image
+        print("image error")
 
     return final_img
 
@@ -122,6 +123,7 @@ def find_roi(img):
                 cv2.drawContours(mask, [i], -1, (255, 255, 255), -1)
 
         final_img = crop_roi(mask, img_copy, height_og, width_og)
-        final_img = cv2.resize(final_img, (128, 128))
+
+    final_img = cv2.resize(final_img, (128, 128))
 
     return final_img
