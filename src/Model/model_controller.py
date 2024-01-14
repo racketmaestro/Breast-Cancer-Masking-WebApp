@@ -122,14 +122,10 @@ class ModelController:
         image_data = uploaded_file.read()
 
         # Open the image with PIL (ensures compatibility with different file types)
-        image = Image.open(io.BytesIO(image_data))
+        image = Image.open(io.BytesIO(image_data)).convert("RGB")
 
         # Transform the image to fit the model input requirements
         image_array = np.array(image)
-
-        if len(image_array.shape) < 3:
-            image_array = np.expand_dims(image_array, axis=2)
-            image_array = np.repeat(image_array, 3, 2)
 
         cropped_image = find_roi(image_array)
         cropped_image = np.expand_dims(cropped_image, axis=0)
@@ -145,10 +141,11 @@ class ModelController:
             probability_of_chosen_class = prediction[0, birads_classification - 1]
 
             if probability_of_chosen_class <= 0.5:
-                st.error( """
+                st.error(
+                    """
                         Our model could not decisively predict your breast density based on the mammogram, 
                         perhaps check that you have uploaded the correct image or find another mammogram"""
-                        )
+                )
                 return
         except Exception as e:
             st.error(
