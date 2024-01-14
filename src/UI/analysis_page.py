@@ -45,32 +45,33 @@ class AnalysisPageInterface:
 
         # Update patient_info dictionary based on user input
         self.patient_info["mammogram_image"] = st.file_uploader("Upload Mammogram Image", type=config['file_types'])
-        
+
+        # Display the uploaded image
+        if self.patient_info["mammogram_image"] is not None:
+            # Display the uploaded file directly
+            st.image(self.patient_info["mammogram_image"], caption='Uploaded Image', width=300)
+
+        # Conditional inputs for children and if user has had biopsy
+        if st.checkbox("Tick if you have a child/children"):
+            self.patient_info["age_at_first_child"] = st.slider("At what age did you have your first child?", **config['age_first_child'])
+
+        biopsy_status = st.radio("Have you ever had a biopsy for breast cancer?", config['biopsy_status'])
+        if biopsy_status == 'No':
+            self.patient_info["num_benign_diagnoses"] = '0'
+        elif biopsy_status == 'Unknown':
+            self.patient_info["num_benign_diagnoses"] = "Unknown"
+        else:
+            self.patient_info["num_benign_diagnoses"] = st.radio("How many breast biopsies with benign diagnoses:", config['num_benign_diagnoses'])
+            self.patient_info["atypical_hyperplasia_status"] = st.radio("Have you ever had a breast biopsy with atypical hyperplasia?", config['atypical_hyperplasia_status'])
+
         with st.form('my form', border= False):
-            # Display the uploaded image
-            if self.patient_info["mammogram_image"] is not None:
-                # Display the uploaded file directly
-                st.image(self.patient_info["mammogram_image"], caption='Uploaded Image', width=300)
 
             self.patient_info["age"] = st.slider("Age", **config['age_range'])
             self.patient_info["age_men"] = st.slider("Age of first Menstrual Period", **config['age_men_range'])
             self.patient_info["ethnicity"] = st.selectbox("Ethnicity", config['ethnicities'])
             self.patient_info["relatives_with_cancer"] = st.selectbox("Number of first degree relatives who had breast cancer", config['relatives_with_cancer'])
-
-            # Conditional inputs for children and if user has had biopsy
-            if st.checkbox("Tick if you have a child/children"):
-                self.patient_info["age_at_first_child"] = st.slider("At what age did you have your first child?", **config['age_first_child'])
-
-            biopsy_status = st.radio("Have you ever had a biopsy for breast cancer?", config['biopsy_status'])
-            if biopsy_status == 'No':
-                self.patient_info["num_benign_diagnoses"] = '0'
-            elif biopsy_status == 'Unknown':
-                self.patient_info["num_benign_diagnoses"] = "Unknown"
-            else:
-                self.patient_info["num_benign_diagnoses"] = st.radio("How many breast biopsies with benign diagnoses:", config['num_benign_diagnoses'])
-                self.patient_info["atypical_hyperplasia_status"] = st.radio("Have you ever had a breast biopsy with atypical hyperplasia?", config['atypical_hyperplasia_status'])
-
             self.patient_info["menopause_status"] = st.radio("Have you been through menopause?", config['menopause_status'])
+
             # Check for mammogram image upload
             if st.form_submit_button("Submit"):
                 if self.patient_info["mammogram_image"] is None:
