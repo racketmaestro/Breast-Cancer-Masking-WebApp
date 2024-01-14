@@ -121,6 +121,7 @@ def find_roi(img):
     contours = contours[0] if len(contours) == 2 else contours[1]
 
     if len(contours) <= 1:
+        mask = binary
         # this means that the breast takes up the whole of the mammogram, no mini objects identified
         # so we will just take the entire image as the roi
         final_img = crop_roi(mask, img_copy, height_og, width_og)
