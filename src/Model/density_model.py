@@ -76,9 +76,7 @@ history = model.fit(
 
 
 # Modify which layers are trainable
-# Here we are unfreezing some of the other blocks of the newtwork
-# To do finetuning.
-# I chose to unfreeze from block 4 onwards
+# Unfreezing some of the other blocks (block 4 onwards) of the newtwork to do finetuning.
 # Determine what layer number does block 4 start from
 start_layer_num = 0
 for layer_number in range(len(model.layers)):
@@ -99,7 +97,6 @@ for layer_number in range(start_layer_num, len(model.layers)):
 # Recompile the model because we unfroze some layers
 # Compile model with much lower learning rate and loss function
 model.compile(
-    #   optimizer=tf.keras.optimizers.Adam(lr=1e-3, decay=1e-6),
     optimizer=tf.keras.optimizers.SGD(
         learning_rate=1e-4, weight_decay=1e-6, momentum=0.9
     ),  # Lower the learning rate to 1e-4
@@ -109,7 +106,7 @@ model.compile(
 print("Model compiled for 2nd step training with block 4 onwards unfrozen. Summary:")
 # print(model.summary(show_trainable=True))
 
-# Now we can use some callbacks
+# Using callbacks to stop the model early if performance is stagnant
 early_stopping = tf.keras.callbacks.EarlyStopping(
     monitor="val_accuracy",
     verbose=1,
@@ -126,7 +123,8 @@ save_model = tf.keras.callbacks.ModelCheckpoint(
     mode="max",
 )
 callback = [save_model, early_stopping]
-# Start finetuning with validation set and mlflow monitoring and callbacks
+
+# Start finetuning with validation set
 history = model.fit(
     train_ds,
     epochs=NUM_EPOCHS_FULL_MODEL,
