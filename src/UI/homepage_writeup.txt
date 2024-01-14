@@ -1,3 +1,6 @@
+
+
+
 ### The Risk Prediction Model
 
 This section of the project had the ultimate goal of coming up with a both a qualitative and quantitative risk score of future breast cancer development. This risk score would be based on both the uploaded patient health data and their uploaded mammogram. In order to evaluate a patient’s health data, to come up with an informed breast cancer risk assessment, the use of a linear regression model would be required. Our breast cancer risk assessment model is a heavily modified version of the “Gail Model” as developed by Dr Michael Gail of the National Cancer Institute (National Cancer Institute, 2019).
@@ -21,6 +24,19 @@ $$
 \text{AbsRisk} = \text{GailRisk} \times \frac{r_{\text{patient}}}{\text{WARR}}
 \end{aligned}
 $$ 
+
+
+
+### Convolutional Neural Network (CNN) for classifying breast density
+
+CNNs are widely used in medical image classication tasks. We developed our own CNN using transfer learning from a pre-trained EfficentNetB0 model for this project. EfficnetNet is a state of the model architecure which achieves high performance accuracy while also being more computationally efficient than other similarly large model architectures. It is built using the MobileNet-V2 architecure which is an architecture that incorporates multiple depthwise separable convolutions and residual connections to optimise training. 
+
+The EfficientNet model was initially instantiated with pre-trained weights, using noisy student weights which have shown to have better performance on large datasets. The base model is then frozen, and additional Dense layers are added on top of the base model to enable classification into 4 BI-RADS Density categories. These layers are intially trained with 10 epochs to update their weights. We then implemented model finetuning by unfreezing some of the EfficientNet base layers and updating their weights with a much lower learning rate. This leads to a robust model which is less prone to overfitting while achieving higher validation accuracy.
+
+#### Image Processing
+Mammograms contain a large amount of empty space and preprocessing is required to obtain the Region of Interest (ROI) in each mammogram to achieve better training performance. A combination of Gaussian blurring, masking, filtering and cropping was applied to process the images. The contrast and sharpness of the images' features were then increased. All processing was applied through a combination of opencv computer vision methods, and is illustrated below.
+
+
 
 **References:**
 - Gao, Y. and Heller, S.L. (2022). Health Disparity and Breast Cancer Outcomes in Asian Women.RadioGraphics. doi:https://doi.org/10.1148/rg.220074.
