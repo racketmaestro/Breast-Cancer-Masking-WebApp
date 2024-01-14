@@ -104,6 +104,10 @@ class ModelController:
     
     def predict_birad_classification(self, uploaded_file):
         '''This function will use the mammogram uploaded to predict the BiRads classification of the user'''
+
+        # Initialise the default birad classification output
+        birads_classification = None
+        
         # Read the file into a bytes-like object
         image_data = uploaded_file.read()
 
@@ -122,11 +126,21 @@ class ModelController:
         # Predict probability of each BiRads classification
         try:
             prediction = self.birad_classification_model(image_array)
+            
+            # Set the classification to the category with highest probability. + 1 since zero-index
+            birads_classification = np.argmax(prediction) + 1 
+
+            # Check that the probability output is above a certain threshold
+            probability_of_chosen_class = prediction[0, birads_classification - 1]
+            print(prediction)
+            if probability_of_chosen_class <= 0.8:
+                st.error('''
+                        Our model could not decisively predict your breast density based on the mammogram, 
+                        perhaps check that you have uploaded the correct image or find another mammogram''')
+                return 
+            
         except Exception as e:
             st.error(f"An error occurred while trying to predict BiRads classification: {e}")
-
-        # Set the classification to the category with highest probability. + 1 since zero-index
-        birads_classification = np.argmax(prediction) + 1 
 
         return birads_classification
 

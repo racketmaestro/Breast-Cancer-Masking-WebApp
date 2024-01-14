@@ -21,6 +21,8 @@ Refer to the web app to find out more about the technical details behind our mod
 
 You can use your preferred way to set up the virtual environment.
 
+```cmd```
+
 ```pip install virtualenv```
 
 Create the virtual environment: `virtualenv <your_venv_name>` 
@@ -32,7 +34,7 @@ Install the dependencies in the virtual environment: ```pip install -r  requirem
 
 ## Local development
 
-Run the streamlit app for local development by running `streamlit run app.py` in the command prompt. Make changes on the dev branch before merging to the master branch.
+Run the streamlit app for local development by running `streamlit run app.py` in the command prompt. Make changes on the dev branch and test locally before merging to the master branch.
 
 Run tests using the command `pytest` in the root directory. Test cases can be found in the'tests' folder.
 

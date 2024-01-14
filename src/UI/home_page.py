@@ -27,11 +27,22 @@ class HomePageInterface():
         ---
         ## Summary
 
-        *Dilcocks rule*
+        This project aims to provide an accessible platform for users to receive a quick breast cancer risk assessment based on their health data and mammograms. 
 
-        ---
+
         """
         )
+                # Function to read the contents of the text file
+        def load_markdown_file(markdown_file):
+            with open(markdown_file, "r", encoding="utf-8") as file:
+                return file.read()
+
+        # Path to your text file
+        markdown_file_path = 'src/UI/writeup.txt'
+
+        # Load and display the content as Markdown
+        markdown_content = load_markdown_file(markdown_file_path)
+        st.markdown(markdown_content, unsafe_allow_html=True)
 
         st.markdown("""
         ### Contributors
