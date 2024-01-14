@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from src.Model.Gail_ModelV5 import RiskModel
+from src.Model.risk_model import RiskModel
 
 def test_gail_model():
     '''This unit test will generate synthetic data using DataSynthesizer for the gail model and
