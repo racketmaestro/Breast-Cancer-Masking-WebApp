@@ -28,24 +28,28 @@ class HomePageInterface():
         ## Summary
 
         This project aims to provide an accessible platform for users to receive a quick breast cancer risk assessment based on their health data and mammograms. 
+        Risk of breast cancer is known to increase with breast density. However, the current online Breast Cancer Risk Assessment Tool (BCRAT), also known as the Gail Model, only uses select health data to make a quick risk analysis.
 
+        Our risk prediction model extends the Gail Model by incorporating breast density and menopause data, which are factors that affect the risk of breast cancer, to make a more informed risk assessment.
 
-        ---
+        Breast density is determined by running the mammogram through a Convolutional Neural Network Tensorflow model that is trained on the Mini-DDSM Dataset. The model outputs the probability density function for Breast Imaging Reporting and Data System (BI-RADS) categories (A, B, C and D). Users or doctors with an available mammogram can easily upload it and fill in the questionnaire on the web app.
+
         """
         )
-                # Function to read the contents of the text file
+        
+        # Function to read the contents of the text file
         def load_markdown_file(markdown_file):
             with open(markdown_file, "r", encoding="utf-8") as file:
                 return file.read()
 
-        # Path to your text file
-        markdown_file_path = 'src/UI/writeup.txt'
+        markdown_file_path = 'src/UI/homepage_writeup.txt'
 
         # Load and display the content as Markdown
         markdown_content = load_markdown_file(markdown_file_path)
         st.markdown(markdown_content, unsafe_allow_html=True)
 
         st.markdown("""
+                    ---
         ### Contributors
         
         - [Amos Koh](https://www.linkedin.com/in/ak726/)

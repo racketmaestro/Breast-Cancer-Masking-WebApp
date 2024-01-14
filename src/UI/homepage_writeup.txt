@@ -1,0 +1,29 @@
+### The Risk Prediction Model
+
+This section of the project had the ultimate goal of coming up with a both a qualitative and quantitative risk score of future breast cancer development. This risk score would be based on both the uploaded patient health data and their uploaded mammogram. In order to evaluate a patient’s health data, to come up with an informed breast cancer risk assessment, the use of a linear regression model would be required. Our breast cancer risk assessment model is a heavily modified version of the “Gail Model” as developed by Dr Michael Gail of the National Cancer Institute (National Cancer Institute, 2019).
+
+The Gail Model was created based off of statistical studies taken on women throughout their lifetime, which were used to create relative risks of specific factors. These relative risk factors were used in conjunction with baseline age-specific hazard rates to calculate patient specific breast cancer predictions. The model first recodes and categorizes the inputted patient data. It then scales by the race specific relative risk factors and calculates a singular risk value. Finally the model utilizes age and race specific incidence rates to calculate an absolute risk value for a given time interval (5 year or lifetime) based on prediction intervals.
+ 
+Our project modified an existing python iteration of the Gail Model (Kurban, 2019).  Our modifications fixed both logical errors present within the code as well as adapted it for our specific use case. We introduced a patient health data questionnaire in the web application which feeds directly into the model. In addition, incorporating Object-Oriented practices helped make our code more modular and easier to develop. 
+
+Our main alteration was to integrate breast density and menopause status into the Gail Model. The Gail Model did not have functionality to account for the breast density relative risk. However, as this data was taken from populations on a race by race basis, we concluded breast density’s relative risk would be intrinsically included within each race’s relative risk (e.g. white women have a certain distribution of breast density and the risk because of this density distribution would be included in the overall relative risk of the white population). We sourced a paper (Gao and Heller, 2022) which had data on the distributions of breast densities in certain races – pre and post. We sourced another paper (Thompson, Fraser and Tuffaha (2021)) with BI-RADSS relative risk factors (relative to BI-RADSS 2), and weighted it by the race and menopausal breast density distributions according to the following proprietary formula we developed:
+
+$$
+\begin{aligned}
+\text{WARR} = \sum_{i=1}^4 p_i \times r_i
+\end{aligned}
+$$ 
+
+Where WARR is the Weighted Average Relative Risk, and p<sub>i</sub> is the probability of the i<sup>th</sup> BI-RADS category based on the distribution, and r<sub>i</sub> is the relative risk associated with that BI-RADSS category. To work out the patient’s absolute risk we utilized the following formula where r<sub>patient</sub> is the risk associated with patient’s BI-RADSS score, GailRisk is the risk of future breast cancer development without density calculation and AbsRisk is the patients’ absolute final risk of future breast cancer development.
+
+$$
+\begin{aligned}
+\text{AbsRisk} = \text{GailRisk} \times \frac{r_{\text{patient}}}{\text{WARR}}
+\end{aligned}
+$$ 
+
+**References:**
+- Gao, Y. and Heller, S.L. (2022). Health Disparity and Breast Cancer Outcomes in Asian Women.RadioGraphics. doi:https://doi.org/10.1148/rg.220074.
+- Kurban, R. (2019). Practical-Data-Science/BCRA_R_to_Python.ipynb at master · ritakurban/Practical-Data-Science. [online] GitHub. Available at: https://github.com/ritakurban/Practical-Data-Science/blob/master/BCRA_R_to_Python.ipynb [Accessed 14 Jan. 2024].
+- National Cancer Institute (2019). Breast Cancer Risk Assessment Tool. [online] Breast Cancer Risk Assessment Tool. Available at: https://bcrisktool.cancer.gov/.
+- Thompson, E., Fraser, S. and Tuffaha, H. (2021). Mammographic / Breast Density Facts and Issues. [online] cosa.org.au. Available at: https://www.cosa.org.au/media/332779/breast_density_facts_issues_final_approved_5march2021.pdf [Accessed 14 Jan. 2024].

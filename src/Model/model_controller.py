@@ -124,11 +124,6 @@ class ModelController:
         # Open the image with PIL (ensures compatibility with different file types)
         image = Image.open(io.BytesIO(image_data))
 
-        # Don't grayscale
-        # # Convert the image to grayscale
-        # if image.mode != 'L':
-        #     image = image.convert('L')
-
         # Transform the image to fit the model input requirements
         image_array = np.array(image)
 
@@ -137,7 +132,6 @@ class ModelController:
             image_array = np.repeat(image_array, 3, 2)
 
         cropped_image = find_roi(image_array)
-
         cropped_image = np.expand_dims(cropped_image, axis=0)
 
         # Predict probability of each BiRads classification
@@ -149,15 +143,13 @@ class ModelController:
 
             # Check that the probability output is above a certain threshold
             probability_of_chosen_class = prediction[0, birads_classification - 1]
-            print(prediction)
+
             if probability_of_chosen_class <= 0.5:
-                st.error(
-                    """
+                st.error( """
                         Our model could not decisively predict your breast density based on the mammogram, 
                         perhaps check that you have uploaded the correct image or find another mammogram"""
-                )
+                        )
                 return
-
         except Exception as e:
             st.error(
                 f"An error occurred while trying to predict BiRads classification: {e}"
