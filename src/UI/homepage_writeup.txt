@@ -39,7 +39,9 @@ Mammograms contain a large amount of empty space and preprocessing is required t
 
 
 **References:**
+- Bharatdhyani (2021). Efficient Nets with Noisy Student Training. [online] Medium. Available at: https://towardsdatascience.com/efficient-nets-with-noisy-student-training-5ac6e239ff14.
 - Gao, Y. and Heller, S.L. (2022). Health Disparity and Breast Cancer Outcomes in Asian Women.RadioGraphics. doi:https://doi.org/10.1148/rg.220074.
 - Kurban, R. (2019). Practical-Data-Science/BCRA_R_to_Python.ipynb at master · ritakurban/Practical-Data-Science. [online] GitHub. Available at: https://github.com/ritakurban/Practical-Data-Science/blob/master/BCRA_R_to_Python.ipynb [Accessed 14 Jan. 2024].
 - National Cancer Institute (2019). Breast Cancer Risk Assessment Tool. [online] Breast Cancer Risk Assessment Tool. Available at: https://bcrisktool.cancer.gov/.
+- Tan, M. and Le, Q.V. (2020). EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks. arXiv:1905.11946 [cs, stat]. [online] Available at: https://arxiv.org/abs/1905.11946v5.
 - Thompson, E., Fraser, S. and Tuffaha, H. (2021). Mammographic / Breast Density Facts and Issues. [online] cosa.org.au. Available at: https://www.cosa.org.au/media/332779/breast_density_facts_issues_final_approved_5march2021.pdf [Accessed 14 Jan. 2024].
